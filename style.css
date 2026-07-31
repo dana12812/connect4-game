@@ -1,0 +1,53 @@
+/* Global variables used throughout the stylesheet */
+:root {
+  --cell-size: 60px;      /* Size of each game cell */
+  --board-gap: 6px;       /* Space between cells */
+}
+
+/* Game board container */
+#gameBoard {
+  display: grid; /* Arrange cells in a grid */
+
+  grid-template-columns: repeat(7, var(--cell-size)); /* 7 columns */
+  grid-template-rows: repeat(6, var(--cell-size));    /* 6 rows */
+
+  gap: var(--board-gap); /* Space between cells */
+
+  background-color: #1b3a6b; /* Blue board background */
+
+  padding: 10px; /* Space around the board */
+
+  width: fit-content; /* Board fits its content only */
+}
+
+/* Default appearance of every cell */
+.cell {
+  width: var(--cell-size);   /* Cell width */
+  height: var(--cell-size);  /* Cell height */
+
+  background-color: white;   /* Empty cell */
+
+  border-radius: 50%; /* Make the cell a circle */
+}
+
+/* Player 1 piece */
+.cell.Player1 {
+  background-color: #f67bab; /* Pink */
+}
+
+/* Player 2 piece */
+.cell.Player2 {
+  background-color: #74f1f9; /* Teal */
+}
+
+/* Status message */
+#statusMessage {
+  font-weight: bold; /* Bold text */
+  font-size: 18px;   /* Larger text */
+}
+
+/* Restart button */
+#restartButton {
+  cursor: pointer;   /* Hand cursor */
+  padding: 8px 16px; /* Space inside button */
+}

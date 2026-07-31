@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect 4 - Game </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Connect Four</h1>
+
+  <!-- required by project rubric: instructions must be visible in the app -->
+  <p id="instructions">
+    Click a column to drop your piece. Get four in a row — horizontally, vertically, or diagonally — to win.
+  </p>
+
+  <!-- single element that shows whose turn it is, and later, win/draw messages -->
+  <p id="statusMessage">Player 1's turn</p>
+
+  <!-- empty on purpose: JavaScript will fill this with 42 cell divs -->
+  <div id="gameBoard"></div>
+
+  <!-- click listener will be attached to this in script.js -->
+  <button id="restartButton">Restart Game</button>
+
+  <!-- placed at the bottom so the HTML above already exists when this JS file runs -->
+  <script src="script.js"></script>
+</body>
+</html>

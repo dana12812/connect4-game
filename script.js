@@ -120,6 +120,23 @@ const countDirection = (row, col, dr, dc, player) => {
 };
 
 
+const checkWin = (row, col) => {
+    const player = cells[row][col];
+    const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+
+    for (const [dr, dc] of directions) {
+
+        const total = 1 + countDirection(row, col, dr, dc, player) + countDirection(row, col, -dr, -dc, player); 
+
+
+        if (total >= 4) return true;
+    }
+
+    return false;
+}
+
+
+
 
 
 

@@ -90,6 +90,57 @@ boardElement.addEventListener('click', (e) => {
     statusMessage.textContent = `${currentPlayer}'s turn`; // ← add this line
 });
 
+const countDirection = (row, col, dr, dc, player) => {
+  // Step 1: move one step away from the starting piece in the given direction
+  // (we don't want to count the piece itself, only what's around it)
+  let r = row + dr;
+  let c = col + dc;
+
+  // Step 2: start the tally at zero, since we haven't found any matches yet
+  let count = 0;
+
+  // Step 3: keep repeating as long as ALL of these are true —
+  // still a valid row, still a valid column, and the piece here matches
+  while (r >= 0 && r < rows && c >= 0 && c < columns && cells[r][c] === player) {
+
+    // Step 4: it matched — add one to the tally
+    count++;
+
+    // Step 5: move one more step further in the same direction,
+    // so the next loop check looks at the next cell over
+    r += dr;
+    c += dc;
+
+    // Step 6: loop back up to Step 3 and check again from this new position
+  }
+
+  // Step 7: the loop stopped (off the board, empty cell, or wrong player) —
+  // hand back however many matches were found before that happened
+  return count;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*----------------- Boot ---------------*/

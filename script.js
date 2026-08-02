@@ -14,40 +14,52 @@ let gameOver = false;
 
 /*------------- Functions --------------*/
 
+//function 1
 function init() {
     cells = Array.from({ length: rows }, () => Array(columns).fill(''));
     currentPlayer = 'Player1';
     gameOver = false;
 }
 
+//function 2
 function render() {
     boardElement.innerHTML = '';
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < columns; col++) {
-            const cell = document.createElement('div');
-            cell.className = 'cell';
-            if (cells[row][col]) cell.classList.add(cells[row][col]);
-            cell.dataset.row = row;
-            cell.dataset.col = col;
-            boardElement.appendChild(cell);
-        }
-    }
+    cells.forEach((rowArray, row) => {
+        rowArray.forEach((cell, col) => {
+            const cellDiv = document.createElement('div');
+            cellDiv.className = 'cell';
+            if (cell) cellDiv.classList.add(cell);
+            cellDiv.dataset.row = row;
+            cellDiv.dataset.col = col;
+            boardElement.appendChild(cellDiv);
+        });
+    });
 }
 
+//function 3
 function getAvailableRow(col) {
     return cells.map(row => row[col]).lastIndexOf('');
 }
 
+//function 4
 const countDirection = (row, col, dr, dc, player) => {
-    let r = row + dr, c = col + dc, count = 0;
-    while (r >= 0 && r < rows && c >= 0 && c < columns && cells[r][c] === player) {
-        count++;
-        r += dr;
-        c += dc;
-    }
+    const maxSteps = Math.max(rows, columns);
+    let count = 0;
+
+    Array.from({ length: maxSteps }).every((_, i) => {
+        const step = i + 1;
+        const r = row + dr * step;
+        const c = col + dc * step;
+        const isMatch = r >= 0 && r < rows && c >= 0 && c < columns && cells[r][c] === player;
+
+        if (isMatch) count++;
+        return isMatch;
+    });
+
     return count;
 };
 
+//function 5
 const checkWin = (row, col) => {
     const player = cells[row][col];
     const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
@@ -56,9 +68,10 @@ const checkWin = (row, col) => {
     );
 };
 
+//function 6
 const isBoardFull = () => cells.every(row => row.every(cell => cell !== ''));
 
-// ends the game and shows a message — used by both win and draw
+//function 7
 function endGame(message) {
     gameOver = true;
     render();

@@ -7,6 +7,8 @@ const statusMessage = document.querySelector('#statusMessage');
 const restartButton = document.querySelector('#restartButton');
 const STORAGE_KEY = 'connectFourState';
 
+
+
 /*---------- Variables (State) ---------*/
 
 let cells = [];

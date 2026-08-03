@@ -23,33 +23,6 @@ const init = () => {
     gameOver = false;
 };
 
-
-/* ---- Persistence (saving/loading across page reloads) ---- */
-
-// saves the current game state so it survives a page reload
-const saveState = () => {
-    const state = {
-        cells,
-        currentPlayer,
-        gameOver,
-        statusText: statusMessage.textContent,
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-};
-
-// loads a saved game if one exists — returns true if it found one
-const loadState = () => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return false;
-
-    const state = JSON.parse(saved);
-    cells = state.cells;
-    currentPlayer = state.currentPlayer;
-    gameOver = state.gameOver;
-    statusMessage.textContent = state.statusText;
-    return true;
-};
-
 /* ---- Rendering ---- */
 
 // draws the cells array onto the page as circles
@@ -140,14 +113,3 @@ restartButton.addEventListener('click', () => {
     statusMessage.textContent = `${currentPlayer}'s turn`;
     saveState();
 });
-
-/*----------------- Boot ---------------*/
-
-if (!loadState()) {
-    init();
-    statusMessage.textContent = `${currentPlayer}'s turn`;
-}
-render();
-
-boardElement.classList.add('ready');
-statusMessage.classList.add('ready');

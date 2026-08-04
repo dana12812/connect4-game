@@ -169,16 +169,24 @@ modeButtons.forEach((button) => {
     });
 });
 // Player 1 name
+// Update Player 1 name
 p1NameInput.addEventListener('input', () => {
     player1Name = p1NameInput.value.trim() || 'Player 1';
     updateNameLabels();
+    if (!gameOver && currentPlayer === 'Player1') {
+        setStatus(`${player1Name}'s turn`, '');
+    }
     saveState();
 });
 // Player 2 name
+// Update Player 2 name
 p2NameInput.addEventListener('input', () => {
     if (gameMode === 'pvc') return;
     player2Name = p2NameInput.value.trim() || 'Player 2';
     updateNameLabels();
+    if (!gameOver && currentPlayer === 'Player2') {
+        setStatus(`${player2Name}'s turn`, '');
+    }
     saveState();
 });
 // Reset everything
@@ -223,7 +231,6 @@ resetGameButton.addEventListener('click', resetEverything);
 applyTheme(localStorage.getItem(THEME_KEY) === 'light');
 if (!loadState()) {
     init();
-    setStatus(`${player1Name}'s turn`, '');
 }
 p1NameInput.value = player1Name;
 p2NameInput.value = player2Name;
@@ -237,6 +244,12 @@ modeButtons.forEach((button) => {
 if (gameMode === 'pvc') {
     p2NameInput.disabled = true;
 }
+const currentName =
+    currentPlayer === 'Player1'
+        ? player1Name
+        : player2Name;
+
+setStatus(`${currentName}'s turn`, '');
 render();
 renderScores();
 renderTimer();

@@ -102,17 +102,12 @@ restartButton.addEventListener('click', () => {
 
 /*-------------- Constants -------------*/
 const statusMessage = document.querySelector('#statusMessage');
-const statusIcon = document.querySelector('#statusIcon');
 const pauseButton = document.querySelector('#pauseButton');
 const p1ScoreEl = document.querySelector('#p1Score');
 const p2ScoreEl = document.querySelector('#p2Score');
 const tieScoreEl = document.querySelector('#tieScore');
 const timerDisplay = document.querySelector('#timerDisplay');
 const STORAGE_KEY = 'connectFourState';
-const ICONS = {
-  win: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/></svg>`,
-  draw: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>`,
-};
 
 /*---------- Variables (State) ---------*/
 let isPaused = false, scores = { Player1: 0, Player2: 0, ties: 0 };
@@ -120,22 +115,17 @@ let winningCells = [], seconds = 0, timerId = null;
 
 /*-------------- Functions -------------*/
 
+// updates the status banner's text and glow color
 const setStatus = (text, tone) => {
   statusMessage.className = tone || '';
   statusText.textContent = text;
-  statusIcon.innerHTML = tone === 'win-p1' || tone === 'win-p2' ? ICONS.win : tone === 'draw' ? ICONS.draw : '';
 };
 
+// updates the 3 score numbers
 const renderScores = () => {
-  [[p1ScoreEl, scores.Player1], [p2ScoreEl, scores.Player2], [tieScoreEl, scores.ties]].forEach(([el, val]) => {
-    if (el.textContent === String(val)) return;
-    el.textContent = val;
-    el.classList.add('pulse');
-    setTimeout(() => el.classList.remove('pulse'), 400);
-  });
-  document.querySelectorAll('.score').forEach(c => c.classList.remove('leading'));
-  if (scores.Player1 > scores.Player2 && scores.Player1 > 0) document.querySelector('.score.p1').classList.add('leading');
-  if (scores.Player2 > scores.Player1 && scores.Player2 > 0) document.querySelector('.score.p2').classList.add('leading');
+  p1ScoreEl.textContent = scores.Player1;
+  p2ScoreEl.textContent = scores.Player2;
+  tieScoreEl.textContent = scores.ties;
 };
 
 const renderTimer = () => timerDisplay.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;

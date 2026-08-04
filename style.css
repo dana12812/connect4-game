@@ -77,8 +77,6 @@ body {
 #statusMessage.win-p1 { color: var(--pink); }
 #statusMessage.win-p2 { color: var(--blue); }
 #statusMessage.draw { color: #666; }
-#statusIcon svg { width: 18px; height: 18px; }
-#statusIcon:empty { display: none; }
 
 #scoreboard { display: flex; gap: 12px; width: 100%; justify-content: center; flex-wrap: wrap; }
 
@@ -92,7 +90,6 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  position: relative;
 }
 .score.p1 { background-color: #fdeaf1; }
 .score.tie { background-color: #f0f0f0; }
@@ -106,24 +103,6 @@ body {
 .info { display: flex; flex-direction: column; }
 .name { font-size: 12px; color: #666; }
 .value { font-size: 18px; font-weight: bold; }
-
-.value.pulse { animation: scorePulse 0.4s ease; }
-@keyframes scorePulse {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.35); }
-  100% { transform: scale(1); }
-}
-
-.score.leading::after {
-  content: "";
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
-}
 
 #gameBoard {
   display: grid;

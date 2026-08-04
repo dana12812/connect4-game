@@ -257,4 +257,4 @@ renderLeaderboard();
 if (!gameOver) {
     startTimer();
 }
-boardElement.classList.add('ready'); //////////
+boardElement.classList.add('ready');

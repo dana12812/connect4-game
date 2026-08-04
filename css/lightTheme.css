@@ -93,18 +93,39 @@ border-color:rgba(20,20,40,.08);
 color:#181c2b;
 }
 
+body.light #modeToggle{
+    background:rgba(255,255,255,.55);
+    border-color:rgba(20,20,40,.08);
+}
+
 body.light .modeBtn{
-background:rgba(255,255,255,.55);
-border-color:rgba(20,20,40,.08);
-color:#181c2b;
+    color:#181c2b;
+}
+
+body.light .modeBtn:hover{
+    background:rgba(255,255,255,.6);
 }
 
 body.light #p1NameInput,
 body.light #p2NameInput{
-background:rgba(255,255,255,.55);
-border-color:rgba(20,20,40,.08);
-color:#181c2b;
+    background:rgba(255,255,255,.75);
+    border:1px solid rgba(20,20,40,.08);
+    color:#181c2b;
 }
+
+body.light #p1NameInput:focus,
+body.light #p2NameInput:focus{
+    border-color:#35C8FF;
+    box-shadow:
+        0 0 0 3px rgba(53,200,255,.18),
+        0 0 18px rgba(53,200,255,.18);
+}
+
+body.light #p1NameInput::placeholder,
+body.light #p2NameInput::placeholder{
+    color:rgba(24,28,43,.45);
+}
+
 
 body.light #leaderboardPanel{
 background:rgba(255,255,255,.65);

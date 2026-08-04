@@ -1,44 +1,215 @@
 # Connect Four
 
-## Description
+A browser-based implementation of the classic **Connect Four** game built with **HTML, CSS, and JavaScript**. The game features both Player vs Player and Player vs Computer modes, a timer, leaderboard, dark/light themes, local storage, and a responsive interface.
 
-Connect Four is a two-player strategy game built with HTML, CSS, and JavaScript. Players take turns dropping discs into a 7×6 grid, aiming to line up four in a row — horizontally, vertically, or diagonally.
+---
 
-## Technologies Used
+## Live Demo
 
-* HTML
-* CSS
-* JavaScript
+Play the game here:
 
-## Game Instructions
+**https://dana12812.github.io/connect4-game/**
 
-**1. Starting the Game**
-* The game begins with Player 1 (Blue) taking the first turn
-* The current player is indicated on the game interface
+---
 
-**2. Make a Move**
-* Click any empty cell on the board to place your disc
-* Once placed, a disc stays in that exact position
-* Players alternate turns automatically
+## Game Preview
 
-**3. Scoring**
-* Horizontal (across) = 1 point
-* Vertical (up/down) = 1 point
-* Diagonal (corner to corner) = 1 point
+### Home Screen
 
-**4. Winning**
-* The game continues until the board is full
-* Winner: the player with the most points (most Connect 4 patterns)
-* Tie: if both players have equal points
+> Save as `screenshots/home.png`
 
-**5. Reset**
-* Use the "Reset Game" button to clear the board and start over
-* Scores are maintained unless specifically reset
+![Home Screen](screenshots/home.png)
 
-## Screenshot
+### Gameplay
 
-![Game screenshot](https://i.imgur.com/muH9vNp.png)
+> Save as `screenshots/gameplay.png`
 
-## Winning Combination
+![Gameplay](screenshots/gameplay.png)
 
-![Winning combination example](https://i.imgur.com/Fy56esE.png)
+### Winning Screen
+
+> Save as `screenshots/winner.png`
+
+![Winning Screen](screenshots/winner.png)
+
+### Light Theme
+
+> Save as `screenshots/light-theme.png`
+
+![Light Theme](screenshots/light-theme.png)
+
+### Mobile Layout
+
+> Save as `screenshots/mobile.png`
+
+![Mobile Layout](screenshots/mobile.png)
+
+---
+
+## Features
+
+- Player vs Player mode
+- Player vs Computer mode
+- Custom player names
+- Scoreboard
+- Leaderboard
+- Timer
+- Pause and Resume
+- New Game
+- Reset Game
+- Local Storage
+- Dark Theme
+- Light Theme
+- Winning animations using Canvas Confetti
+- Responsive design for desktop, tablet, and mobile devices
+
+---
+
+## Built With
+
+- HTML5
+- CSS3
+- JavaScript (ES6)
+- CSS Grid
+- Flexbox
+- Local Storage API
+
+---
+
+## Folder Structure
+
+```text
+connect4-game
+│
+├── README.md
+├── index.html
+│
+├── css
+│   ├── style.css
+│   ├── responsive.css
+│   └── lightTheme.css
+│
+└── js
+    ├── data.js
+    ├── game.js
+    └── ui.js
+```
+
+---
+
+## How to Play
+
+1. Enter player names.
+2. Select either **Two Players** or **Vs Computer**.
+3. Click on a column to drop your disc.
+4. Players alternate turns.
+5. Connect four discs horizontally, vertically, or diagonally to win.
+6. Use **Pause** to stop the timer.
+7. **New Game** starts another round while keeping scores.
+8. **Reset Game** clears all scores, names, and saved data.
+
+---
+
+## Technologies
+
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript (ES6)
+
+### Design
+
+- CSS Grid
+- Flexbox
+- Media Queries
+- Glassmorphism UI
+
+## Installation
+
+Clone the repository.
+
+```bash
+git clone https://github.com/dana12812/connect4-game.git
+```
+
+Navigate into the project.
+
+```bash
+cd connect4-game
+```
+
+Open `index.html` in your preferred web browser.
+
+---
+
+## Future Enhancements
+
+- Multiple AI difficulty levels
+- Sound effects
+- Disc drop animations
+- Online multiplayer
+- Player statistics
+- Undo move
+- Match history
+- Best-of-three game mode
+
+---
+
+## Attributions
+
+The following external resources were used during the development of this project.
+
+### Google Fonts
+
+- Poppins
+- Cinzel
+
+https://fonts.google.com/
+
+### Canvas Confetti
+
+Used to display the winning celebration animation.
+
+https://www.npmjs.com/package/canvas-confetti
+
+Loaded via jsDelivr CDN.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+```
+
+https://www.jsdelivr.com/
+
+### MDN Web Docs
+
+Used as a reference for:
+
+- HTML
+- CSS
+- JavaScript
+- DOM Manipulation
+- Local Storage
+- Event Listeners
+
+https://developer.mozilla.org/
+
+### General Assembly
+
+Project requirements and course materials.
+
+---
+
+## Author
+
+**Dana Alsaleh**
+
+GitHub
+
+https://github.com/dana12812
+
+---
+
+## License
+
+This project was created for educational purposes as part of the General Assembly Software Engineering Bootcamp.

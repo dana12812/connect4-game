@@ -1,13 +1,18 @@
 /*========================= MVP =========================*/
 
 /*-------------- Constants -------------*/
-const rows = 6, columns = 7;
+
+const rows = 6;
+const columns = 7;
 const boardElement = document.querySelector('#gameBoard');
 const statusText = document.querySelector('#statusText');
 const restartButton = document.querySelector('#restartButton');
 
 /*---------- Variables (State) ---------*/
-let cells = [], currentPlayer = 'Player1', gameOver = false;
+
+let cells = [];
+let currentPlayer = 'Player1';
+let gameOver = false;
 
 /*-------------- Functions -------------*/
 
@@ -19,41 +24,73 @@ const init = () => {
 
 const render = () => {
   boardElement.innerHTML = '';
-  cells.forEach((rowArray, row) => rowArray.forEach((cell, col) => {
-    const cellDiv = document.createElement('div');
-    cellDiv.className = 'cell';
-    if (cell) cellDiv.classList.add(cell);
-    if (winningCells.some(([r, c]) => r === row && c === col)) cellDiv.classList.add('win');
-    cellDiv.dataset.row = row;
-    cellDiv.dataset.col = col;
-    boardElement.appendChild(cellDiv);
-  }));
+
+  cells.forEach((rowArray, row) => {
+    rowArray.forEach((cell, col) => {
+      const cellDiv = document.createElement('div');
+      cellDiv.className = 'cell';
+
+      if (cell) {
+        cellDiv.classList.add(cell);
+      }
+
+      const isWinningCell = winningCells.some(([r, c]) => r === row && c === col);
+      if (isWinningCell) {
+        cellDiv.classList.add('win');
+      }
+
+      cellDiv.dataset.row = row;
+      cellDiv.dataset.col = col;
+      boardElement.appendChild(cellDiv);
+    });
+  });
 };
 
-const getAvailableRow = (col) => cells.map(row => row[col]).lastIndexOf('');
+const getAvailableRow = (col) => {
+  const columnValues = cells.map(row => row[col]);
+  return columnValues.lastIndexOf('');
+};
 
 const countDirection = (row, col, dr, dc, player, collected) => {
   let count = 0;
+
   Array.from({ length: Math.max(rows, columns) }).every((_, i) => {
-    const r = row + dr * (i + 1), c = col + dc * (i + 1);
+    const r = row + dr * (i + 1);
+    const c = col + dc * (i + 1);
     const isMatch = r >= 0 && r < rows && c >= 0 && c < columns && cells[r][c] === player;
-    if (isMatch) { count++; collected.push([r, c]); }
+
+    if (isMatch) {
+      count++;
+      collected.push([r, c]);
+    }
+
     return isMatch;
   });
+
   return count;
 };
 
 const checkWin = (row, col) => {
   const player = cells[row][col];
-  return [[0, 1], [1, 0], [1, 1], [1, -1]].some(([dr, dc]) => {
+  const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+
+  return directions.some(([dr, dc]) => {
     const collected = [[row, col]];
-    const total = 1 + countDirection(row, col, dr, dc, player, collected) + countDirection(row, col, -dr, -dc, player, collected);
-    if (total >= 4) winningCells = collected;
+    const forward = countDirection(row, col, dr, dc, player, collected);
+    const backward = countDirection(row, col, -dr, -dc, player, collected);
+    const total = 1 + forward + backward;
+
+    if (total >= 4) {
+      winningCells = collected;
+    }
+
     return total >= 4;
   });
 };
 
-const isBoardFull = () => cells.every(row => row.every(cell => cell !== ''));
+const isBoardFull = () => {
+  return cells.every(row => row.every(cell => cell !== ''));
+};
 
 /*----------- Event Listeners ----------*/
 
@@ -72,9 +109,11 @@ boardElement.addEventListener('click', (e) => {
     scores[currentPlayer]++;
     renderScores();
     launchConfetti();
-    setStatus(`${currentPlayer} wins!`, currentPlayer === 'Player1' ? 'win-p1' : 'win-p2');
+    const tone = currentPlayer === 'Player1' ? 'win-p1' : 'win-p2';
+    setStatus(`${currentPlayer} wins!`, tone);
     return endGame();
   }
+
   if (isBoardFull()) {
     scores.ties++;
     renderScores();
@@ -101,6 +140,7 @@ restartButton.addEventListener('click', () => {
 /*==================== ADDITIONAL FEATURES ====================*/
 
 /*-------------- Constants -------------*/
+
 const statusMessage = document.querySelector('#statusMessage');
 const pauseButton = document.querySelector('#pauseButton');
 const p1ScoreEl = document.querySelector('#p1Score');
@@ -110,8 +150,12 @@ const timerDisplay = document.querySelector('#timerDisplay');
 const STORAGE_KEY = 'connectFourState';
 
 /*---------- Variables (State) ---------*/
-let isPaused = false, scores = { Player1: 0, Player2: 0, ties: 0 };
-let winningCells = [], seconds = 0, timerId = null;
+
+let isPaused = false;
+let scores = { Player1: 0, Player2: 0, ties: 0 };
+let winningCells = [];
+let seconds = 0;
+let timerId = null;
 
 /*-------------- Functions -------------*/
 
@@ -128,17 +172,39 @@ const renderScores = () => {
   tieScoreEl.textContent = scores.ties;
 };
 
-const renderTimer = () => timerDisplay.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
-const startTimer = () => { stopTimer(); timerId = setInterval(() => { seconds++; renderTimer(); }, 1000); };
-const stopTimer = () => { clearInterval(timerId); timerId = null; };
+const renderTimer = () => {
+  const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const secondsPart = String(seconds % 60).padStart(2, '0');
+  timerDisplay.textContent = `${minutes}:${secondsPart}`;
+};
+
+const startTimer = () => {
+  stopTimer();
+  timerId = setInterval(() => {
+    seconds++;
+    renderTimer();
+  }, 1000);
+};
+
+const stopTimer = () => {
+  clearInterval(timerId);
+  timerId = null;
+};
 
 const togglePause = () => {
   if (gameOver) return;
+
   isPaused = !isPaused;
   boardElement.classList.toggle('paused', isPaused);
   pauseButton.textContent = isPaused ? 'Resume' : 'Pause';
-  isPaused ? stopTimer() : startTimer();
+
+  if (isPaused) {
+    stopTimer();
+  } else {
+    startTimer();
+  }
 };
+
 pauseButton.addEventListener('click', togglePause);
 
 // triggers a confetti burst using the canvas-confetti library (see README Resources)
@@ -147,34 +213,64 @@ const launchConfetti = () => {
     particleCount: 100,
     spread: 90,
     origin: { y: 0.4 },
-    colors: ['#F66FB1', '#63E4EE', '#A93DFF', '#ffffff']
+    colors: ['#F66FB1', '#63E4EE', '#A93DFF', '#ffffff'],
   });
 };
 
-const saveState = () => localStorage.setItem(STORAGE_KEY, JSON.stringify({
-  cells, currentPlayer, gameOver, scores, seconds, statusText: statusText.textContent, statusTone: statusMessage.className,
-}));
+const saveState = () => {
+  const state = {
+    cells: cells,
+    currentPlayer: currentPlayer,
+    gameOver: gameOver,
+    scores: scores,
+    seconds: seconds,
+    statusText: statusText.textContent,
+    statusTone: statusMessage.className,
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+};
 
 const loadState = () => {
   const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) return false;
-  const s = JSON.parse(saved);
-  cells = s.cells || Array.from({ length: rows }, () => Array(columns).fill(''));
-  currentPlayer = s.currentPlayer || 'Player1';
-  gameOver = s.gameOver || false;
-  scores = s.scores || { Player1: 0, Player2: 0, ties: 0 };
-  seconds = s.seconds || 0;
-  setStatus(s.statusText || '', s.statusTone || '');
+
+  if (!saved) {
+    return false;
+  }
+
+  const state = JSON.parse(saved);
+
+  cells = state.cells || Array.from({ length: rows }, () => Array(columns).fill(''));
+  currentPlayer = state.currentPlayer || 'Player1';
+  gameOver = state.gameOver || false;
+  scores = state.scores || { Player1: 0, Player2: 0, ties: 0 };
+  seconds = state.seconds || 0;
+
+  setStatus(state.statusText || '', state.statusTone || '');
+
   return true;
 };
 
-const endGame = () => { gameOver = true; stopTimer(); render(); saveState(); };
+const endGame = () => {
+  gameOver = true;
+  stopTimer();
+  render();
+  saveState();
+};
 
 
 /*----------------- Boot ---------------*/
-if (!loadState()) { init(); setStatus(`${currentPlayer}'s turn`, ''); }
+
+if (!loadState()) {
+  init();
+  setStatus(`${currentPlayer}'s turn`, '');
+}
+
 render();
 renderScores();
 renderTimer();
-if (!gameOver) startTimer();
+
+if (!gameOver) {
+  startTimer();
+}
+
 boardElement.classList.add('ready');

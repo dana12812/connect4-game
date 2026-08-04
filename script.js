@@ -20,6 +20,7 @@ const init = () => {
   cells = Array.from({ length: rows }, () => Array(columns).fill(''));
   currentPlayer = 'Player1';
   gameOver = false;
+  winningCells = [];
 };
 
 const render = () => {
@@ -159,13 +160,11 @@ let timerId = null;
 
 /*-------------- Functions -------------*/
 
-// updates the status banner's text and glow color
 const setStatus = (text, tone) => {
   statusMessage.className = tone || '';
   statusText.textContent = text;
 };
 
-// updates the 3 score numbers
 const renderScores = () => {
   p1ScoreEl.textContent = scores.Player1;
   p2ScoreEl.textContent = scores.Player2;
@@ -207,7 +206,6 @@ const togglePause = () => {
 
 pauseButton.addEventListener('click', togglePause);
 
-// triggers a confetti burst using the canvas-confetti library (see README Resources)
 const launchConfetti = () => {
   confetti({
     particleCount: 100,

@@ -4,73 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect 4 - Game</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-
-  <div id="container">
-
+<div id="container">
     <header id="header">
-      <div class="brand">
-        <div class="logo"><span class="pink"></span><span class="blue"></span></div>
-        <div class="brand-text">
-          <h1>Connect Four</h1>
-          <p id="instructions">
-            Click a column to drop your piece. Get four in a row — horizontally, vertically, or diagonally — to win.
-          </p>
+        <div class="brand">
+            <div class="logo">
+                <span class="pink"></span>
+                <span class="blue"></span>
+            </div>
+            <div class="brandText">
+                <h1>Connect Four</h1>
+                <p id="instructions">
+                    Click a column to drop your piece. Get four in a row — horizontally, vertically, or diagonally — to win.
+                </p>
+            </div>
         </div>
-      </div>
-
-      <div id="timerCard">
-        <span class="label">TIME</span>
-        <span id="timerDisplay">00:00</span>
-      </div>
+        <div id="timerCard">
+            <span class="label">TIME</span>
+            <span id="timerDisplay">00:00</span>
+        </div>
     </header>
-
     <p id="statusMessage">
-      <span id="statusText"></span>
+        <span id="statusText"></span>
     </p>
-
-    <div id="scoreboard">
-      <span class="score p1">
-        <span class="avatar p1"></span>
-        <span class="info">
-          <span class="name">Player1</span>
-          <span class="value" id="p1Score">0</span>
+    <div id="scoreBoard">
+        <span class="scoreCard playerOne">
+            <span class="avatar playerOne"></span>
+            <span class="info">
+                <span class="name">Player 1</span>
+                <span class="value" id="p1Score">0</span>
+            </span>
         </span>
-      </span>
-      <span class="score tie">
-        <span class="avatar tie"></span>
-        <span class="info">
-          <span class="name">Ties</span>
-          <span class="value" id="tieScore">0</span>
+        <span class="scoreCard tie">
+            <span class="avatar tie"></span>
+            <span class="info">
+                <span class="name">Ties</span>
+                <span class="value" id="tieScore">0</span>
+            </span>
         </span>
-      </span>
-      <span class="score p2">
-        <span class="avatar p2"></span>
-        <span class="info">
-          <span class="name">Player2</span>
-          <span class="value" id="p2Score">0</span>
+        <span class="scoreCard playerTwo">
+            <span class="avatar playerTwo"></span>
+            <span class="info">
+                <span class="name">Player 2</span>
+                <span class="value" id="p2Score">0</span>
+            </span>
         </span>
-      </span>
     </div>
-
     <div id="boardWrap">
-      <div id="gameBoard"></div>
+        <div id="gameBoard"></div>
     </div>
-
     <div id="controls">
-      <button id="pauseButton">Pause</button>
-      <button id="restartButton">New Game</button>
+        <button id="pauseButton">Pause</button>
+        <button id="restartButton">New Game</button>
     </div>
+    <footer>
+        Made with HTML • CSS • JavaScript
+    </footer>
+</div>
 
-    <footer>Made with HTML • CSS • JavaScript</footer>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+<script src="script.js"></script>
 
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
-  <script src="script.js"></script>
 </body>
 </html>

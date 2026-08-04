@@ -1,0 +1,117 @@
+/* Light theme overrides — everything above stays dark by default */
+body.light{
+background:linear-gradient(160deg,#eef1fc 0%,#e6ebf9 20%,#dde5f6 40%,#d3ddf3 60%,#c8d5ef 80%,#bccdea 100%);
+color:#181c2b;
+}
+
+body.light #container{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light .brandText h1{
+color:#181c2b;
+}
+
+body.light #instructions{
+background:rgba(255,255,255,.65);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light #instructions h2{
+color:#181c2b;
+}
+
+body.light #instructions li{
+color:rgba(24,28,43,.8);
+}
+
+body.light #instructions li strong{
+color:#181c2b;
+}
+
+body.light #timerCard{
+background:rgba(255,255,255,.75);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light .label{
+color:rgba(24,28,43,.7);
+}
+
+body.light #timerDisplay{
+color:#181c2b;
+}
+
+body.light #statusMessage{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light #statusText{
+color:#181c2b;
+}
+
+body.light .scoreCard{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light .name{
+color:rgba(24,28,43,.7);
+}
+
+body.light .value{
+color:#181c2b;
+}
+
+body.light #gameBoard{
+background:#3a4290;
+}
+
+body.light .cell{
+background:#dfe3f5;
+}
+
+body.light #pauseButton{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light #pauseButton:hover{
+background:rgba(255,255,255,.8);
+}
+
+body.light footer{
+color:rgba(24,28,43,.5);
+}
+
+body.light #themeButton{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light .modeBtn{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light #p1NameInput,
+body.light #p2NameInput{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light #leaderboardPanel{
+background:rgba(255,255,255,.65);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light #leaderboardList li{
+color:rgba(24,28,43,.8);
+border-color:rgba(20,20,40,.08);
+}

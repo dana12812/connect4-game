@@ -1,0 +1,561 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:linear-gradient(160deg,#05060F 0%,#0E1230 20%,#141B45 40%,#1D2760 60%,#2C2A78 80%,#3B2E8C 100%);
+min-height:100vh;
+color:#F8FAFF;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+padding:40px 20px;
+overflow-x:hidden;
+}
+
+#container{
+position:relative;
+width:1280px;
+max-width:100%;
+padding:40px;
+display:flex;
+flex-direction:column;
+gap:24px;
+background:rgba(20,26,56,.35);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:32px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+#header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px;
+padding-top:10px;
+padding-right:90px;
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:18px;
+}
+
+.logo{
+width:44px;
+height:32px;
+position:relative;
+}
+
+.logo span{
+position:absolute;
+top:0;
+width:28px;
+height:28px;
+border-radius:50%;
+border:1px solid rgba(255,255,255,.25);
+}
+
+.logo .pink{
+left:0;
+background:#F66FB1;
+box-shadow:0 0 15px rgba(246,111,177,.4);
+}
+
+.logo .blue{
+left:14px;
+background:#63E4EE;
+box-shadow:0 0 15px rgba(99,228,238,.4);
+}
+
+.brandText h1{
+font-family:'Cinzel',serif;
+font-size:44px;
+font-weight:700;
+letter-spacing:2px;
+color:#F8FAFF;
+}
+
+/* Instructions box */
+#instructions{
+background:rgba(15,20,40,.55);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+padding:18px 22px;
+}
+
+#instructions h2{
+font-family:'Cinzel',serif;
+font-size:16px;
+margin-bottom:10px;
+color:#F8FAFF;
+}
+
+#instructions ol{
+list-style:decimal;
+padding-left:18px;
+display:grid;
+gap:6px;
+}
+
+#instructions li{
+font-size:13.5px;
+line-height:1.5;
+color:rgba(248,250,255,.8);
+}
+
+#instructions li strong{
+color:#F8FAFF;
+}
+
+#timerCard{
+width:130px;
+height:130px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:rgba(15,20,40,.70);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.label{
+font-size:13px;
+font-weight:600;
+letter-spacing:2px;
+text-transform:uppercase;
+color:rgba(255,255,255,.7);
+}
+
+#timerDisplay{
+margin-top:8px;
+font-size:36px;
+font-weight:700;
+color:#F8FAFF;
+}
+
+#statusMessage{
+width:280px;
+height:58px;
+align-self:center;
+display:flex;
+justify-content:center;
+align-items:center;
+background:rgba(20,26,56,.35);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:999px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+#statusText{
+font-size:24px;
+font-weight:700;
+color:#F8FAFF;
+}
+
+#scoreBoard{
+display:flex;
+justify-content:space-between;
+gap:16px;
+width:100%;
+}
+
+.scoreCard{
+flex:1;
+height:68px;
+display:flex;
+align-items:center;
+padding:0 18px;
+background:rgba(20,26,56,.35);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+.avatar{
+width:22px;
+height:22px;
+border-radius:50%;
+flex-shrink:0;
+margin-right:12px;
+}
+
+.avatar.playerOne{
+background:#F66FB1;
+box-shadow:0 0 15px rgba(246,111,177,.45);
+}
+
+.avatar.tie{
+background:#D0D3E8;
+}
+
+.avatar.playerTwo{
+background:#63E4EE;
+box-shadow:0 0 15px rgba(99,228,238,.45);
+}
+
+.info{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex:1;
+}
+
+.name{
+font-size:14px;
+font-weight:500;
+color:rgba(248,250,255,.75);
+}
+
+.value{
+font-size:22px;
+font-weight:700;
+color:#F8FAFF;
+}
+
+/* Board + leaderboard side by side */
+#gameArea{
+display:flex;
+justify-content:center;
+align-items:flex-start;
+gap:20px;
+width:100%;
+flex-wrap:wrap;
+}
+
+#boardWrap{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+#gameBoard{
+display:grid;
+grid-template-columns:repeat(7,56px);
+grid-template-rows:repeat(6,56px);
+gap:12px;
+padding:16px;
+background:#252D71;
+border-radius:24px;
+box-shadow:0 0 40px rgba(41,183,255,.2);
+}
+
+.cell{
+width:56px;
+height:56px;
+background:#070B1C; /* inside circle color */
+border-radius:50%;
+cursor:pointer;
+transition:.25s ease;
+box-shadow:
+inset 0 6px 12px rgba(0,0,0,.7),
+0 2px 6px rgba(255,255,255,.03);
+}
+
+.cell.Player1{
+background:#F66FB1;
+box-shadow:
+0 0 18px rgba(246,111,177,.45),
+inset 0 4px 8px rgba(255,255,255,.25);
+}
+
+.cell.Player2{
+background:#63E4EE;
+box-shadow:
+0 0 18px rgba(99,228,238,.45),
+inset 0 4px 8px rgba(255,255,255,.25);
+}
+
+.cell.win{
+outline:3px solid #F8FAFF;
+transform:scale(1.08);
+}
+
+#gameBoard.paused{
+opacity:.5;
+pointer-events:none;
+}
+
+/* Leaderboard side panel */
+#leaderboardPanel{
+width:220px;
+background:rgba(15,20,40,.55);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:20px;
+padding:18px;
+}
+
+#leaderboardPanel h2{
+font-family:'Cinzel',serif;
+font-size:16px;
+margin-bottom:10px;
+}
+
+#leaderboardList{
+list-style:decimal;
+padding-left:18px;
+display:grid;
+gap:6px;
+}
+
+#leaderboardList li{
+font-size:13px;
+padding:5px 0;
+border-bottom:1px solid rgba(255,255,255,.08);
+color:rgba(248,250,255,.85);
+}
+
+#controls{
+display:flex;
+justify-content:center;
+gap:16px;
+}
+
+#pauseButton,
+#restartButton,
+#resetGameButton{
+height:56px;
+padding:0 26px;
+border:none;
+border-radius:18px;
+font-family:'Poppins',sans-serif;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+transition:.3s ease;
+}
+
+#pauseButton,
+#resetGameButton{
+background:rgba(20,26,56,.35);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.08);
+color:#F8FAFF;
+}
+
+#pauseButton:hover,
+#resetGameButton:hover{
+background:rgba(40,48,82,.6);
+}
+
+#restartButton{
+background:linear-gradient(90deg,#A93DFF,#29B7FF);
+color:white;
+box-shadow:0 0 30px rgba(41,183,255,.35);
+}
+
+#restartButton:hover{
+transform:translateY(-2px);
+box-shadow:0 0 40px rgba(41,183,255,.5);
+}
+
+footer{
+text-align:center;
+font-size:14px;
+color:rgba(248,250,255,.5);
+}
+
+/* Theme button, positioned in #container's corner */
+#themeButton{
+position:absolute;
+top:22px;
+right:22px;
+z-index:5;
+width:42px;
+height:42px;
+border-radius:50%;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(20,26,56,.35);
+color:#F8FAFF;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+backdrop-filter:blur(20px);
+}
+
+#themeButton svg{
+width:18px;
+height:18px;
+}
+
+/* Setup panel: mode toggle, name inputs */
+#setupPanel{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:16px;
+flex-wrap:wrap;
+}
+
+#modeToggle{
+display:flex;
+gap:8px;
+}
+
+.modeBtn{
+padding:8px 14px;
+border-radius:999px;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(20,26,56,.35);
+color:#F8FAFF;
+cursor:pointer;
+font-family:'Poppins',sans-serif;
+font-size:12.5px;
+}
+
+.modeBtn.active{
+background:linear-gradient(90deg,#A93DFF,#29B7FF);
+border:none;
+}
+
+#nameInputs{
+display:flex;
+gap:10px;
+}
+
+#p1NameInput,
+#p2NameInput{
+padding:8px 12px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(20,26,56,.35);
+color:#F8FAFF;
+font-family:'Poppins',sans-serif;
+font-size:12.5px;
+width:110px;
+}
+
+#p2NameInput:disabled{
+opacity:.5;
+}
+
+/* Light theme overrides — everything above stays dark by default */
+body.light{
+background:linear-gradient(160deg,#eef1fc 0%,#e6ebf9 20%,#dde5f6 40%,#d3ddf3 60%,#c8d5ef 80%,#bccdea 100%);
+color:#181c2b;
+}
+
+body.light #container{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light .brandText h1{
+color:#181c2b;
+}
+
+body.light #instructions{
+background:rgba(255,255,255,.65);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light #instructions h2{
+color:#181c2b;
+}
+
+body.light #instructions li{
+color:rgba(24,28,43,.8);
+}
+
+body.light #instructions li strong{
+color:#181c2b;
+}
+
+body.light #timerCard{
+background:rgba(255,255,255,.75);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light .label{
+color:rgba(24,28,43,.7);
+}
+
+body.light #timerDisplay{
+color:#181c2b;
+}
+
+body.light #statusMessage{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light #statusText{
+color:#181c2b;
+}
+
+body.light .scoreCard{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light .name{
+color:rgba(24,28,43,.7);
+}
+
+body.light .value{
+color:#181c2b;
+}
+
+body.light #gameBoard{
+background:#3a4290;
+}
+
+body.light .cell{
+background:#dfe3f5;
+}
+
+body.light #pauseButton{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light #pauseButton:hover{
+background:rgba(255,255,255,.8);
+}
+
+body.light footer{
+color:rgba(24,28,43,.5);
+}
+
+body.light #themeButton{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light .modeBtn{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light #p1NameInput,
+body.light #p2NameInput{
+background:rgba(255,255,255,.55);
+border-color:rgba(20,20,40,.08);
+color:#181c2b;
+}
+
+body.light #leaderboardPanel{
+background:rgba(255,255,255,.65);
+border-color:rgba(20,20,40,.08);
+}
+
+body.light #leaderboardList li{
+color:rgba(24,28,43,.8);
+border-color:rgba(20,20,40,.08);
+}

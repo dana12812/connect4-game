@@ -1,0 +1,146 @@
+/* Tablets: leaderboard drops below the board instead of sitting beside it */
+@media (max-width:1024px){
+#gameArea{
+flex-direction:column;
+align-items:center;
+}
+#leaderboardPanel{
+width:100%;
+max-width:400px;
+}
+.brandText h1{
+font-size:34px;
+}
+}
+
+/* Mobile */
+@media (max-width:768px){
+#container{
+padding:22px;
+gap:18px;
+}
+#header{
+flex-direction:column;
+text-align:center;
+gap:14px;
+padding-right:0;
+}
+.brand{
+flex-direction:column;
+text-align:center;
+}
+#setupPanel{
+flex-direction:column;
+align-items:stretch;
+}
+#modeToggle{
+justify-content:center;
+}
+#nameInputs{
+justify-content:center;
+}
+#scoreBoard{
+flex-wrap:wrap;
+}
+.scoreCard{
+min-width:45%;
+}
+#statusMessage{
+width:90%;
+}
+}
+
+/* Small phones */
+@media (max-width:480px){
+#container{
+padding:14px;
+border-radius:22px;
+}
+#themeButton{
+top:12px;
+right:12px;
+width:36px;
+height:36px;
+}
+#themeButton svg{
+width:15px;
+height:15px;
+}
+.brandText h1{
+font-size:24px;
+letter-spacing:1px;
+}
+#instructions{
+padding:14px 16px;
+}
+#instructions li{
+font-size:12px;
+}
+#timerCard{
+width:auto;
+height:auto;
+padding:8px 16px;
+}
+#timerDisplay{
+font-size:20px;
+}
+.label{
+font-size:10px;
+}
+#p1NameInput,
+#p2NameInput{
+width:100%;
+}
+#nameInputs{
+flex-direction:column;
+}
+#gameBoard{
+grid-template-columns:repeat(7,32px);
+grid-template-rows:repeat(6,32px);
+gap:5px;
+padding:8px;
+border-radius:16px;
+}
+.cell{
+width:32px;
+height:32px;
+}
+.cell.win{
+outline-width:2px;
+}
+#scoreBoard{
+flex-direction:column;
+}
+.scoreCard{
+width:100%;
+height:56px;
+}
+.value{
+font-size:16px;
+}
+.name{
+font-size:12px;
+}
+#statusMessage{
+width:100%;
+height:auto;
+padding:10px 16px;
+}
+#statusText{
+font-size:16px;
+}
+#controls{
+flex-direction:column;
+align-items:stretch;
+}
+#pauseButton,
+#restartButton,
+#resetGameButton{
+height:48px;
+font-size:14px;
+padding:0 16px;
+}
+footer{
+font-size:12px;
+}
+}

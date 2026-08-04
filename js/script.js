@@ -1,214 +1,363 @@
-// Create a new game
-const init = () => {
-    cells = Array.from({ length: rows }, () => Array(columns).fill(''));
-    currentPlayer = 'Player1';
-    gameOver = false;
-    winningCells = [];
-    seconds = 0;
+/* ---------- DOM Elements ---------- */
+
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+const ui = {
+  board: $('#gameBoard'), 
+  status: $('#statusMessage'), 
+  statusText: $('#statusText'),
+  pause: $('#pauseButton'), 
+  restart: $('#restartButton'), 
+  reset: $('#resetGameButton'),
+  scores: { Player1: $('#p1Score'), 
+            Player2: $('#p2Score'), 
+            ties: $('#tieScore') },
+  timer: $('#timerDisplay'), 
+  theme: $('#themeButton'), 
+  moon: $('#themeIconMoon'), 
+  sun: $('#themeIconSun'),
+  modes: $$('.modeBtn'), 
+  inputs: { Player1: $('#p1NameInput'),
+            Player2: $('#p2NameInput') },
+  labels: { Player1: $('#p1NameLabel'), 
+            Player2: $('#p2NameLabel') },
+  leaderboard: $('#leaderboardList')
 };
-// Draw the game board
-const render = () => {
-    boardElement.innerHTML = '';
-    cells.forEach((rowArray, row) => {
-        rowArray.forEach((cell, col) => {
-            const cellDiv = document.createElement('div');
-            cellDiv.className = 'cell';
-            if (cell) cellDiv.classList.add(cell);
-            if (winningCells.some(([r, c]) => r === row && c === col)) {
-                cellDiv.classList.add('win');
-            }
-            cellDiv.dataset.row = row;
-            cellDiv.dataset.col = col;
-            boardElement.appendChild(cellDiv);
-        });
-    });
-};
-// Find the next empty row
-const getAvailableRow = (col) => {
-    const columnValues = cells.map(row => row[col]);
-    return columnValues.lastIndexOf('');
-};
-// Count connected pieces
-const countDirection = (row, col, dr, dc, player, collected) => {
-    let count = 0;
-    for (let i = 1; i < Math.max(rows, columns); i++) {
-        const r = row + dr * i;
-        const c = col + dc * i;
-        if (
-            r >= 0 &&
-            r < rows &&
-            c >= 0 &&
-            c < columns &&
-            cells[r][c] === player
-        ) {
-            count++;
-            collected.push([r, c]);
-        } else {
-            break;
-        }
-    }
-    return count;
-};
-// Check for a winner
-const checkWin = (row, col) => {
-    const player = cells[row][col];
-    const directions = [
-        [0, 1],
-        [1, 0],
-        [1, 1],
-        [1, -1]
-    ];
-    return directions.some(([dr, dc]) => {
-        const collected = [[row, col]];
-        const forward = countDirection(row, col, dr, dc, player, collected);
-        const backward = countDirection(row, col, -dr, -dc, player, collected);
-        const total = 1 + forward + backward;
-        if (total >= 4) {
-            winningCells = collected;
-        }
-        return total >= 4;
-    });
-};
-// Check if the board is full
-const isBoardFull = () => {
-    return cells.every(row => row.every(cell => cell !== ''));
-};
-// Check if a move would win
-const isWinningMove = (row, col, player) => {
-    const directions = [
-        [0, 1],
-        [1, 0],
-        [1, 1],
-        [1, -1]
-    ];
-    return directions.some(([dr, dc]) => {
-        const collected = [[row, col]];
-        const forward = countDirection(row, col, dr, dc, player, collected);
-        const backward = countDirection(row, col, -dr, -dc, player, collected);
-        return 1 + forward + backward >= 4;
-    });
-};
-// Choose the best computer move
-const getComputerColumn = () => {
-    const validColumns = [];
-    for (let col = 0; col < columns; col++) {
-        if (getAvailableRow(col) !== -1) {
-            validColumns.push(col);
-        }
-    }
-    // Try to win
-    for (const col of validColumns) {
-        const row = getAvailableRow(col);
-        cells[row][col] = 'Player2';
-        const win = isWinningMove(row, col, 'Player2');
-        cells[row][col] = '';
-        if (win) return col;
-    }
-    // Block the player
-    for (const col of validColumns) {
-        const row = getAvailableRow(col);
-        cells[row][col] = 'Player1';
-        const block = isWinningMove(row, col, 'Player1');
-        cells[row][col] = '';
-        if (block) return col;
-    }
-    // Pick a random valid column
-    return validColumns[Math.floor(Math.random() * validColumns.length)];
+/* ---------- Constants ---------- */
+
+const ROWS = 6;
+const COLUMNS = 7;
+const STORAGE_KEY = 'connectFourState';
+const THEME_KEY = 'connectFourTheme';
+const LEADERBOARD_KEY = 'connectFourLeaderboard';
+const COMPUTER_DELAY = 600;
+const PLAYERS = ['Player1', 'Player2'];
+const DIRECTIONS = [[0, 1], [1, 0], [1, 1], [1, -1]];
+const DEFAULT_SCORES = { Player1: 0, Player2: 0, ties: 0 };
+const DEFAULT_NAMES = { Player1: 'Player 1', Player2: 'Player 2' };
+
+/* ---------- Variables ---------- */
+
+let cells = [];
+let currentPlayer = 'Player1';
+let gameOver = false;
+let isPaused = false;
+let isComputerThinking = false;
+let winningCells = [];
+let seconds = 0;
+let timerId = null;
+let gameMode = 'pvp';
+let scores = { ...DEFAULT_SCORES };
+let playerNames = { ...DEFAULT_NAMES };
+
+/* ---------- Functions ---------- */
+
+const createBoard = () => Array.from({ length: ROWS }, () => Array(COLUMNS).fill(''));
+const playerName = (player = currentPlayer) => playerNames[player];
+const nextPlayer = (player = currentPlayer) => player === 'Player1' ? 'Player2' : 'Player1';
+const setStatus = (text, tone = '') => {
+  ui.status.className = tone;
+  ui.statusText.textContent = text;
 };
 
-// Computer turn
-const computerPlay = () => {
-    if (gameOver || isPaused) return;
-    const col = getComputerColumn();
-    const row = getAvailableRow(col);
-    cells[row][col] = currentPlayer;
-    if (checkWin(row, col)) {
-        scores[currentPlayer]++;
-        recordWin(player2Name);
-        renderScores();
-        renderLeaderboard();
-        launchConfetti();
-        setStatus(`${player2Name} wins!`, 'win-p2');
-        endGame();
-        return;
-    }
-    if (isBoardFull()) {
-        scores.ties++;
-        renderScores();
-        setStatus(`It's a draw!`, 'draw');
-        endGame();
-        return;
-    }
-    currentPlayer = 'Player1';
-    render();
-    setStatus(`${player1Name}'s turn`, '');
-    saveState();
-};
-// Finish the game
-const endGame = () => {
-    gameOver = true;
-    stopTimer();
-    render();
-    saveState();
-};
-// Handle board clicks
-boardElement.addEventListener('click', (event) => {
-    if (gameOver || isPaused || isComputerThinking) return;
-    const col = Number(event.target.dataset.col);
-    if (isNaN(col)) return;
-    const row = getAvailableRow(col);
-    if (row === -1) return;
-    cells[row][col] = currentPlayer;
-    const currentName = currentPlayer === 'Player1'
-        ? player1Name
-        : player2Name;
-    if (checkWin(row, col)) {
-        scores[currentPlayer]++;
-        recordWin(currentName);
-        renderScores();
-        renderLeaderboard();
-        launchConfetti();
-        const tone = currentPlayer === 'Player1'
-            ? 'win-p1'
-            : 'win-p2';
-        setStatus(`${currentName} wins!`, tone);
-        endGame();
-        return;
-    }
-    if (isBoardFull()) {
-        scores.ties++;
-        renderScores();
-        setStatus(`It's a draw!`, 'draw');
-        endGame();
-        return;
-    }
-    currentPlayer = currentPlayer === 'Player1'
-        ? 'Player2'
-        : 'Player1';
-    const nextName = currentPlayer === 'Player1'
-        ? player1Name
-        : player2Name;
-    render();
-    setStatus(`${nextName}'s turn`, '');
-    saveState();
-    if (
-        gameMode === 'pvc' &&
-        currentPlayer === 'Player2' &&
-        !gameOver
-    ) {
-        isComputerThinking = true;
-        setTimeout(() => {
-            computerPlay();
-            isComputerThinking = false;
-        }, COMPUTER_DELAY);
-    }
-});
-// Restart the current game
-restartButton.addEventListener('click', () => {
-    init();
-    render();
+function getSavedData(key, fallback) {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function renderBoard() {
+  const fragment = document.createDocumentFragment();
+  cells.forEach((row, rowIndex) => row.forEach((player, columnIndex) => {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.dataset.row = rowIndex;
+    cell.dataset.col = columnIndex;
+    if (player) cell.classList.add(player);
+    if (winningCells.some(([row, col]) => row === rowIndex && col === columnIndex)) cell.classList.add('win');
+    fragment.appendChild(cell);
+  }));
+  ui.board.replaceChildren(fragment);
+}
+
+function renderScores() {
+  Object.entries(scores).forEach(([player, score]) => ui.scores[player].textContent = score);
+}
+
+function renderTimer() {
+  const minutes = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const secs = String(seconds % 60).padStart(2, '0');
+  ui.timer.textContent = `${minutes}:${secs}`;
+}
+
+function renderNames() {
+  PLAYERS.forEach((player) => {
+    ui.labels[player].textContent = playerNames[player];
+    ui.inputs[player].value = playerNames[player];
+  });
+}
+
+function renderLeaderboard() {
+  const entries = Object.entries(getSavedData(LEADERBOARD_KEY, {})).sort(([, a], [, b]) => b - a);
+  ui.leaderboard.replaceChildren();
+  const rows = entries.length ? entries : [['No wins recorded yet', null]];
+  rows.forEach(([name, wins]) => {
+    const item = document.createElement('li');
+    item.textContent = wins === null ? name : `${name} — ${wins} win${wins === 1 ? '' : 's'}`;
+    ui.leaderboard.appendChild(item);
+  });
+}
+
+function renderGame() {
+  renderBoard();
+  renderScores();
+  renderTimer();
+}
+
+function stopTimer() {
+  clearInterval(timerId);
+  timerId = null;
+}
+
+function startTimer() {
+  stopTimer();
+  timerId = setInterval(() => {
+    seconds += 1;
     renderTimer();
-    setStatus(`${player1Name}'s turn`, '');
+  }, 1000);
+}
+function togglePause() {
+  if (gameOver) return;
+  isPaused = !isPaused;
+  ui.board.classList.toggle('paused', isPaused);
+  ui.pause.textContent = isPaused ? 'Resume' : 'Pause';
+  if (isPaused) stopTimer();
+  else {
     startTimer();
+    scheduleComputerMove();
+  }
+}
+function applyTheme(isLight) {
+  document.body.classList.toggle('light', isLight);
+  if (ui.moon) ui.moon.style.display = isLight ? 'none' : 'block';
+  if (ui.sun) ui.sun.style.display = isLight ? 'block' : 'none';
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    cells, currentPlayer, gameOver, scores, seconds, gameMode, playerNames,
+    statusText: ui.statusText.textContent, statusTone: ui.status.className
+  }));
+}
+function loadState() {
+  const saved = getSavedData(STORAGE_KEY, null);
+  if (!saved) return false;
+  cells = saved.cells || createBoard();
+  currentPlayer = saved.currentPlayer || 'Player1';
+  gameOver = Boolean(saved.gameOver);
+  scores = { ...DEFAULT_SCORES, ...saved.scores };
+  seconds = saved.seconds || 0;
+  gameMode = saved.gameMode || 'pvp';
+  playerNames = {
+    ...DEFAULT_NAMES,
+    Player1: saved.player1Name || DEFAULT_NAMES.Player1,
+    Player2: saved.player2Name || DEFAULT_NAMES.Player2,
+    ...(saved.playerNames || {})
+  };
+  setStatus(saved.statusText || '', saved.statusTone || '');
+  return true;
+}
+function saveWin(name) {
+  const leaderboard = getSavedData(LEADERBOARD_KEY, {});
+  leaderboard[name] = (leaderboard[name] || 0) + 1;
+  localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(leaderboard));
+}
+
+function syncModeUI() {
+  ui.modes.forEach((button) => button.classList.toggle('active', button.dataset.mode === gameMode));
+  ui.inputs.Player2.disabled = gameMode === 'pvc';
+}
+
+function setMode(mode) {
+  gameMode = mode;
+  playerNames.Player2 = mode === 'pvc' ? 'Computer' : DEFAULT_NAMES.Player2;
+  renderNames();
+  syncModeUI();
+  saveState();
+  scheduleComputerMove();
+}
+function updatePlayerName(player) {
+  if (player === 'Player2' && gameMode === 'pvc') return;
+  playerNames[player] = ui.inputs[player].value.trim() || DEFAULT_NAMES[player];
+  renderNames();
+  if (!gameOver && currentPlayer === player) setStatus(`${playerName()}'s turn`);
+  saveState();
+}
+
+function getAvailableRow(column) {
+  return cells.map((row) => row[column]).lastIndexOf('');
+}
+
+function getLine(row, column, rowStep, columnStep, player) {
+  const line = [];
+  for (
+    let r = row + rowStep, c = column + columnStep;
+    r >= 0 && r < ROWS && c >= 0 && c < COLUMNS && cells[r][c] === player;
+    r += rowStep, c += columnStep
+  ) line.push([r, c]);
+  return line;
+}
+
+function findWinningCells(row, column, player) {
+  for (const [rowStep, columnStep] of DIRECTIONS) {
+    const line = [[row, column],
+      ...getLine(row, column, rowStep, columnStep, player),
+      ...getLine(row, column, -rowStep, -columnStep, player)];
+    if (line.length >= 4) return line;
+  }
+  return [];
+}
+
+function boardIsFull() {
+  return cells.every((row) => row.every(Boolean));
+}
+
+function getComputerColumn() {
+  const valid = Array.from({ length: COLUMNS }, (_, column) => column)
+    .filter((column) => getAvailableRow(column) !== -1);
+  const findTacticalMove = (player) => valid.find((column) => {
+    const row = getAvailableRow(column);
+    cells[row][column] = player;
+    const wins = findWinningCells(row, column, player).length > 0;
+    cells[row][column] = '';
+    return wins;
+  });
+  return findTacticalMove('Player2')
+    ?? findTacticalMove('Player1')
+    ?? valid[Math.floor(Math.random() * valid.length)];
+}
+
+function endGame(message, tone, winner) {
+  gameOver = true;
+  stopTimer();
+  if (winner) {
+    scores[winner] += 1;
+    saveWin(playerName(winner));
+    launchConfetti();
+    renderLeaderboard();
+  } else scores.ties += 1;
+  setStatus(message, tone);
+  renderGame();
+  saveState();
+}
+
+function playMove(column) {
+  const row = getAvailableRow(column);
+  if (row === -1) return false;
+  cells[row][column] = currentPlayer;
+  winningCells = findWinningCells(row, column, currentPlayer);
+  if (winningCells.length) {
+    endGame(`${playerName()} wins!`, currentPlayer === 'Player1' ? 'win-p1' : 'win-p2', currentPlayer);
+  } else if (boardIsFull()) {
+    endGame("It's a draw!", 'draw');
+  } else {
+    currentPlayer = nextPlayer();
+    renderBoard();
+    setStatus(`${playerName()}'s turn`);
     saveState();
+  }
+  return true;
+}
+
+function scheduleComputerMove() {
+  if (gameMode !== 'pvc' || currentPlayer !== 'Player2' || gameOver || isComputerThinking) return;
+  isComputerThinking = true;
+  setTimeout(() => {
+    if (!gameOver && !isPaused && currentPlayer === 'Player2') playMove(getComputerColumn());
+    isComputerThinking = false;
+  }, COMPUTER_DELAY);
+}
+
+function resetRound() {
+  stopTimer();
+  cells = createBoard();
+  currentPlayer = 'Player1';
+  gameOver = false;
+  isPaused = false;
+  isComputerThinking = false;
+  winningCells = [];
+  seconds = 0;
+  ui.board.classList.remove('paused');
+  ui.pause.textContent = 'Pause';
+}
+
+function restartGame() {
+  resetRound();
+  setStatus(`${playerName()}'s turn`);
+  renderGame();
+  startTimer();
+  saveState();
+}
+
+function resetEverything() {
+  scores = { ...DEFAULT_SCORES };
+  gameMode = 'pvp';
+  playerNames = { ...DEFAULT_NAMES };
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(LEADERBOARD_KEY);
+  resetRound();
+  renderNames();
+  syncModeUI();
+  setStatus(`${playerName()}'s turn`);
+  renderGame();
+  renderLeaderboard();
+  startTimer();
+  saveState();
+}
+
+function launchConfetti() {
+  if (typeof confetti !== 'function') return;
+  confetti({
+    particleCount: 100, spread: 90, origin: { y: 0.4 },
+    colors: ['#F66FB1', '#63E4EE', '#A93DFF', '#FFFFFF']
+  });
+}
+
+/* ---------- Event Listeners ---------- */
+
+ui.board.addEventListener('click', (event) => {
+  const cell = event.target.closest('.cell');
+  if (!cell || gameOver || isPaused || isComputerThinking) return;
+  if (playMove(Number(cell.dataset.col))) scheduleComputerMove();
 });
+
+ui.pause.addEventListener('click', togglePause);
+ui.restart.addEventListener('click', restartGame);
+ui.reset.addEventListener('click', resetEverything);
+ui.theme.addEventListener('click', () => {
+  const isLight = !document.body.classList.contains('light');
+  applyTheme(isLight);
+  localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+});
+ui.modes.forEach((button) => button.addEventListener('click', () => setMode(button.dataset.mode)));
+ui.inputs.Player1.addEventListener('input', () => updatePlayerName('Player1'));
+ui.inputs.Player2.addEventListener('input', () => updatePlayerName('Player2'));
+
+/* ---------- Boot ---------- */
+
+applyTheme(localStorage.getItem(THEME_KEY) === 'light');
+if (!loadState()) resetRound();
+renderNames();
+syncModeUI();
+if (!gameOver) setStatus(`${playerName()}'s turn`);
+renderGame();
+renderLeaderboard();
+if (!gameOver) {
+  startTimer();
+  scheduleComputerMove();
+}
+ui.board.classList.add('ready');

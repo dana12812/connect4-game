@@ -3,114 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connect-Four</title>
+  <title>Connect Four</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
 </head>
 <body>
+  <div id="container">
+    <button id="themeButton" aria-label="Toggle light and dark theme">
+      <svg id="themeIconMoon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg id="themeIconSun" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <circle cx="12" cy="12" r="5"/>
+        <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </button>
 
-<div id="container">
-
-  <button id="themeButton" aria-label="Toggle light and dark theme">
-    <svg id="themeIconMoon" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-    <svg id="themeIconSun" viewBox="0 0 24 24" fill="currentColor" style="display:none">
-      <circle cx="12" cy="12" r="5"/>
-      <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" fill="none" stroke="currentColor" stroke-width="2"/>
-    </svg>
-  </button>
-
-  <header id="header">
-    <div class="brand">
-      <div class="logo">
-        <span class="pink"></span>
-        <span class="blue"></span>
+    <header id="header">
+      <div class="brand">
+        <div class="logo">
+          <span class="pink"></span>
+          <span class="blue"></span>
+        </div>
+        <div class="brandText">
+          <h1>Connect Four</h1>
+        </div>
       </div>
-      <div class="brandText">
-        <h1>Connect Four</h1>
+      <div id="timerCard">
+        <span class="label">Time</span>
+        <span id="timerDisplay">00:00</span>
+      </div>
+    </header>
+
+    <section id="instructions">
+      <h2>How to Play</h2>
+      <ol>
+        <li>Click a column to drop your piece.</li>
+        <li>Connect 4 in a row — across, up-down, or diagonally — to win.</li>
+        <li><strong>Pause</strong> stops the clock.</li>
+        <li><strong>New Game</strong> clears the board, keeps score and names.</li>
+        <li><strong>Reset Game</strong> wipes everything back to a fresh start.</li>
+      </ol>
+    </section>
+
+    <div id="setupPanel">
+      <div id="modeToggle">
+        <button class="modeBtn active" data-mode="pvp">2 Players</button>
+        <button class="modeBtn" data-mode="pvc">Vs Computer</button>
+      </div>
+      <div id="nameInputs">
+        <input id="p1NameInput" type="text" maxlength="12" value="Player 1">
+        <input id="p2NameInput" type="text" maxlength="12" value="Player 2">
       </div>
     </div>
-    <div id="timerCard">
-      <span class="label">TIME</span>
-      <span id="timerDisplay">00:00</span>
-    </div>
-  </header>
 
-  <section id="instructions">
-    <h2>How to Play</h2>
-    <ol>
-      <li>Click a column to drop your piece.</li>
-      <li>Connect 4 in a row — across, up-down, or diagonally — to win.</li>
-      <li><strong>Pause</strong> stops the clock.</li>
-      <li><strong>New Game</strong> clears the board, keeps score &amp; names.</li>
-      <li><strong>Reset Game</strong> wipes everything back to a fresh start.</li>
-    </ol>
-  </section>
+    <p id="statusMessage"><span id="statusText"></span></p>
 
-  <div id="setupPanel">
-    <div id="modeToggle">
-      <button class="modeBtn active" data-mode="pvp">2 Players</button>
-      <button class="modeBtn" data-mode="pvc">Vs Computer</button>
-    </div>
-    <div id="nameInputs">
-      <input id="p1NameInput" type="text" maxlength="12" value="Player 1">
-      <input id="p2NameInput" type="text" maxlength="12" value="Player 2">
-    </div>
-  </div>
-
-  <p id="statusMessage">
-    <span id="statusText"></span>
-  </p>
-
-  <div id="scoreBoard">
-    <span class="scoreCard playerOne">
-      <span class="avatar playerOne"></span>
-      <span class="info">
-        <span class="name" id="p1NameLabel">Player 1</span>
-        <span class="value" id="p1Score">0</span>
+    <div id="scoreBoard">
+      <span class="scoreCard playerOne">
+        <span class="avatar playerOne"></span>
+        <span class="info">
+          <span class="name" id="p1NameLabel">Player 1</span>
+          <span class="value" id="p1Score">0</span>
+        </span>
       </span>
-    </span>
-    <span class="scoreCard tie">
-      <span class="avatar tie"></span>
-      <span class="info">
-        <span class="name">Ties</span>
-        <span class="value" id="tieScore">0</span>
+      <span class="scoreCard tie">
+        <span class="avatar tie"></span>
+        <span class="info">
+          <span class="name">Ties</span>
+          <span class="value" id="tieScore">0</span>
+        </span>
       </span>
-    </span>
-    <span class="scoreCard playerTwo">
-      <span class="avatar playerTwo"></span>
-      <span class="info">
-        <span class="name" id="p2NameLabel">Player 2</span>
-        <span class="value" id="p2Score">0</span>
+      <span class="scoreCard playerTwo">
+        <span class="avatar playerTwo"></span>
+        <span class="info">
+          <span class="name" id="p2NameLabel">Player 2</span>
+          <span class="value" id="p2Score">0</span>
+        </span>
       </span>
-    </span>
-  </div>
-
-  <div id="gameArea">
-    <div id="boardWrap">
-      <div id="gameBoard"></div>
     </div>
-    <aside id="leaderboardPanel">
-      <h2>Leaderboard</h2>
-      <ol id="leaderboardList"></ol>
-    </aside>
+
+    <div id="gameArea">
+      <div id="boardWrap"><div id="gameBoard"></div></div>
+      <aside id="leaderboardPanel">
+        <h2>Leaderboard</h2>
+        <ol id="leaderboardList"></ol>
+      </aside>
+    </div>
+
+    <div id="controls">
+      <button id="pauseButton">Pause</button>
+      <button id="restartButton">New Game</button>
+      <button id="resetGameButton">Reset Game</button>
+    </div>
+
+    <footer>Made with HTML • CSS • JavaScript</footer>
   </div>
 
-  <div id="controls">
-    <button id="pauseButton">Pause</button>
-    <button id="restartButton">New Game</button>
-    <button id="resetGameButton">Reset Game</button>
-  </div>
-
-  <footer>
-    Made with HTML • CSS • JavaScript
-  </footer>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
-<script src="js/script.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+  <script src="js/script.js"></script>
+  
 </body>
 </html>

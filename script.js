@@ -21,6 +21,7 @@ const init = () => {
   currentPlayer = 'Player1';
   gameOver = false;
   winningCells = [];
+  seconds = 0;
 };
 
 const render = () => {
@@ -148,7 +149,11 @@ const p1ScoreEl = document.querySelector('#p1Score');
 const p2ScoreEl = document.querySelector('#p2Score');
 const tieScoreEl = document.querySelector('#tieScore');
 const timerDisplay = document.querySelector('#timerDisplay');
+const themeButton = document.querySelector('#themeButton');
+const themeIconMoon = document.querySelector('#themeIconMoon');
+const themeIconSun = document.querySelector('#themeIconSun');
 const STORAGE_KEY = 'connectFourState';
+const THEME_KEY = 'connectFourTheme';
 
 /*---------- Variables (State) ---------*/
 
@@ -206,6 +211,23 @@ const togglePause = () => {
 
 pauseButton.addEventListener('click', togglePause);
 
+// switches the theme and swaps the sun/moon icon
+// guards against any of the 3 elements being missing, so a typo in HTML can't crash the whole script
+const applyTheme = (isLight) => {
+  document.body.classList.toggle('light', isLight);
+
+  if (themeIconMoon) themeIconMoon.style.display = isLight ? 'none' : 'block';
+  if (themeIconSun) themeIconSun.style.display = isLight ? 'block' : 'none';
+};
+
+if (themeButton) {
+  themeButton.addEventListener('click', () => {
+    const isLight = !document.body.classList.contains('light');
+    applyTheme(isLight);
+    localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+  });
+}
+
 const launchConfetti = () => {
   confetti({
     particleCount: 100,
@@ -257,6 +279,8 @@ const endGame = () => {
 
 
 /*----------------- Boot ---------------*/
+
+applyTheme(localStorage.getItem(THEME_KEY) === 'light');
 
 if (!loadState()) {
   init();

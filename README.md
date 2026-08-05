@@ -29,15 +29,17 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 
 ## Live Demo
 
-<!-- **[Play Connect Four](https://dana12812.github.io/connect4-game/)** i will finish editing and adding comments then i will apply the link -->
+**[Play Connect Four](https://dana12812.github.io/connect4-game/)** 
 
 ---
 
 ## Getting Started
 
-<!-- - **Play online:** [https://dana12812.github.io/connect4-game/](https://dana12812.github.io/connect4-game/)  -->
+- **Play online:** [https://dana12812.github.io/connect4-game/](https://dana12812.github.io/connect4-game/) 
 
 - **Planning materials:** [Figma — Connect Four Game UI](https://www.figma.com/community/file/1666701752891294298)
+
+- **Presentation:** [Connect_Four_Presentation.pdf](presentation/Connect_Four_Presentation.pdf)
 
 
 ---
@@ -101,6 +103,9 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 ```text
 connect4-game
 │
+├── screenshots
+├── presentation
+│   └── Connect_Four_Presentation.pdf
 ├── README.md
 ├── index.html
 │

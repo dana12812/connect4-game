@@ -412,12 +412,10 @@ body{
 footer{
   text-align:center;
   font-size:18px;
-  font-weight: 900;
+  font-weight:900;
   color:white;
 }
-
-/* Theme button */
-
+/* Theme button: sun/moon icons toggle visibility in script.js, only one shows at a time */
 #themeButton{
   position:absolute;
   top:22px;
@@ -438,8 +436,7 @@ footer{
   width:18px;
   height:18px;
 }
-/* Light theme */
-
+/* Light theme: overrides the dark-theme variables above when body.light is toggled on */
 body.light{
   --panel:rgba(255,255,255,.55);
   --surface:rgba(255,255,255,.65);
@@ -453,9 +450,7 @@ body.light{
     radial-gradient(circle at bottom right,rgba(53,200,255,.14),transparent 30%),
     linear-gradient(160deg,#eef1fc 0%,#e6ebf9 20%,#dde5f6 40%,#d3ddf3 60%,#c8d5ef 80%,#bccdea 100%);
 }
-
 body.light #gameBoard{background:#3a4290;}
-
 body.light .cell.Player1{
   background:linear-gradient(145deg,var(--pink),#FF8BC7);
   box-shadow:0 0 18px var(--pink-glow),inset 0 4px 8px rgba(255,255,255,.25);
@@ -464,9 +459,7 @@ body.light .cell.Player2{
   background:linear-gradient(145deg,var(--blue),#9AF8FF);
   box-shadow:0 0 18px var(--blue-glow),inset 0 4px 8px rgba(255,255,255,.25);
 }
-
 body.light .modeBtn:not(.active){color:#181c2b;}
-
 body.light #p1NameInput,
 body.light #p2NameInput{
   background:rgba(255,255,255,.75);
@@ -474,50 +467,49 @@ body.light #p2NameInput{
 }
 body.light #p1NameInput::placeholder,
 body.light #p2NameInput::placeholder{color:rgba(24,28,43,.45);}
-
 body.light footer{color:black;}
 
-/* Responsive */
-
+/* Responsive: breakpoints below target tablet/small laptop, large phone/tablet portrait, and phone screens */
 @media (max-width:1024px){
-#gameArea{flex-direction:column;align-items:center;}
-#leaderboardPanel{width:100%;max-width:400px;}
-.brandText h1{font-size:34px;}
+  /* Tablets and small laptops: stack the leaderboard under the board */
+  #gameArea{flex-direction:column;align-items:center;}
+  #leaderboardPanel{width:100%;max-width:400px;}
+  .brandText h1{font-size:34px;}
 }
-
 @media (max-width:768px){
-#container{padding:22px;gap:18px;}
-#header{flex-direction:column;text-align:center;gap:14px;padding-right:0;}
-.brand{flex-direction:column;text-align:center;}
-#setupPanel{flex-direction:column;align-items:stretch;}
-#modeToggle,#nameInputs{justify-content:center;}
-#scoreBoard{flex-wrap:wrap;}
-.scoreCard{min-width:45%;}
-#statusMessage{width:90%;}
+  /* Tablet portrait / large phones: stack the header and setup controls */
+  #container{padding:22px;gap:18px;}
+  #header{flex-direction:column;text-align:center;gap:14px;padding-right:0;}
+  .brand{flex-direction:column;text-align:center;}
+  #setupPanel{flex-direction:column;align-items:stretch;}
+  #modeToggle,#nameInputs{justify-content:center;}
+  #scoreBoard{flex-wrap:wrap;}
+  .scoreCard{min-width:45%;}
+  #statusMessage{width:90%;}
 }
-
 @media (max-width:480px){
-#container{padding:14px;border-radius:22px;}
-#themeButton{top:12px;right:12px;width:36px;height:36px;}
-#themeButton svg{width:15px;height:15px;}
-.brandText h1{font-size:24px;letter-spacing:1px;}
-#instructions{padding:14px 16px;}
-#instructions li{font-size:12px;}
-#timerCard{width:auto;height:auto;padding:8px 16px;}
-#timerDisplay{font-size:20px;}
-.label{font-size:10px;}
-#p1NameInput,#p2NameInput{width:100%;}
-#nameInputs{flex-direction:column;}
-#gameBoard{grid-template-columns:repeat(7,32px);grid-template-rows:repeat(6,32px);gap:5px;padding:8px;border-radius:16px;}
-.cell{width:32px;height:32px;}
-.cell.win{outline-width:2px;}
-#scoreBoard,#controls{flex-direction:column;}
-.scoreCard{width:100%;height:56px;}
-.value{font-size:16px;}
-.name{font-size:12px;}
-#statusMessage{width:100%;height:auto;padding:10px 16px;}
-#statusText{font-size:16px;}
-#controls{align-items:stretch;}
-#pauseButton,#restartButton,#resetGameButton{height:48px;font-size:14px;padding:0 16px;}
-footer{font-size:12px;}
+  /* Phones: shrink the board and controls to fit a small screen */
+  #container{padding:14px;border-radius:22px;}
+  #themeButton{top:12px;right:12px;width:36px;height:36px;}
+  #themeButton svg{width:15px;height:15px;}
+  .brandText h1{font-size:24px;letter-spacing:1px;}
+  #instructions{padding:14px 16px;}
+  #instructions li{font-size:12px;}
+  #timerCard{width:auto;height:auto;padding:8px 16px;}
+  #timerDisplay{font-size:20px;}
+  .label{font-size:10px;}
+  #p1NameInput,#p2NameInput{width:100%;}
+  #nameInputs{flex-direction:column;}
+  #gameBoard{grid-template-columns:repeat(7,32px);grid-template-rows:repeat(6,32px);gap:5px;padding:8px;border-radius:16px;}
+  .cell{width:32px;height:32px;}
+  .cell.win{outline-width:2px;}
+  #scoreBoard,#controls{flex-direction:column;}
+  .scoreCard{width:100%;height:56px;}
+  .value{font-size:16px;}
+  .name{font-size:12px;}
+  #statusMessage{width:100%;height:auto;padding:10px 16px;}
+  #statusText{font-size:16px;}
+  #controls{align-items:stretch;}
+  #pauseButton,#restartButton,#resetGameButton{height:48px;font-size:14px;padding:0 16px;}
+  footer{font-size:12px;}
 }

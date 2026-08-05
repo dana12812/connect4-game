@@ -33,7 +33,7 @@ const THEME_KEY = 'connectFourTheme';
 const LEADERBOARD_KEY = 'connectFourLeaderboard';
 const COMPUTER_DELAY = 600;
 const PLAYERS = ['Player1', 'Player2'];
-const DIRECTIONS = [[0, 1], [1, 0], [1, 1], [1, -1]];
+const DIRECTIONS = [[0, 1], [1, 0], [1, 1], [1, -1]]; // right, down, diagonal ↘, diagonal ↗
 const DEFAULT_SCORES = { Player1: 0, Player2: 0, ties: 0 };
 const DEFAULT_NAMES = { Player1: 'Player 1', Player2: 'Player 2' };
 
@@ -199,6 +199,7 @@ function updatePlayerName(player) {
 }
 
 function getAvailableRow(column) {
+  // last empty cell in the column = the row the disc will land on
   return cells.map((row) => row[column]).lastIndexOf('');
 }
 
@@ -236,6 +237,7 @@ function getComputerColumn() {
     cells[row][column] = '';
     return wins;
   });
+  // take a winning move if there is one, otherwise block the opponent's, otherwise play randomly
   return findTacticalMove('Player2')
     ?? findTacticalMove('Player1')
     ?? valid[Math.floor(Math.random() * valid.length)];

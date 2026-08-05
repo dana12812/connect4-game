@@ -14,6 +14,8 @@
   --blue-glow:rgba(99,228,238,.42);
   --accent:#35C8FF;
   --accent-2:#B13FFF;
+  --accent-btn:#207A9C;
+  --accent-2-btn:#A33AEB;
   --shadow:0 18px 45px rgba(0,0,0,.35);
 }
 *{
@@ -216,7 +218,8 @@ body{
 .modeBtn:hover{background:rgba(255,255,255,.08);}
 
 .modeBtn.active{
-  background:linear-gradient(135deg,var(--accent-2),var(--accent));
+  color:#F8FAFF;
+  background:linear-gradient(135deg,var(--accent-2-btn),var(--accent-btn));
   box-shadow:0 8px 24px rgba(53,200,255,.25),0 4px 16px rgba(177,63,255,.25);
 }
 #nameInputs{gap:18px;}
@@ -398,7 +401,8 @@ body{
   transform:translateY(-2px);
 }
 #restartButton{
-  background:linear-gradient(90deg,var(--accent-2),var(--accent));
+  color:#F8FAFF;
+  background:linear-gradient(90deg,var(--accent-2-btn),var(--accent-btn));
   box-shadow:0 0 30px rgba(41,183,255,.3);
 }
 #restartButton:hover{
@@ -472,7 +476,7 @@ body.light #p2NameInput{
 body.light #p1NameInput::placeholder,
 body.light #p2NameInput::placeholder{color:rgba(24,28,43,.45);}
 
-body.light footer{color:rgba(24,28,43,.5);}
+body.light footer{color:rgba(24,28,43,.65);}
 
 /* Responsive */
 

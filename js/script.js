@@ -25,7 +25,9 @@ const ui = {
             Player2: $('#p2NameInput') },
   labels: { Player1: $('#p1NameLabel'),
             Player2: $('#p2NameLabel') },
-  leaderboard: $('#leaderboardList')
+  leaderboard: $('#leaderboardList'),
+  startOverlay: $('#startOverlay'),
+  start: $('#startButton')
 };
 /* ---------- Constants ---------- */
 
@@ -50,6 +52,10 @@ let gameOver = false;
 let isPaused = false;
 /* prevents double-moves while the computer's delayed move is pending */
 let isComputerThinking = false;
+/* false until the Start Game button is pressed: keeps the board locked and the
+   clock stopped so nothing happens until the player is ready. Reset for every
+   new round (boot, New Game, Reset Game) so Start must be pressed each time. */
+let hasStarted = false;
 /* the 4 (or more) [row, col] cells that formed the winning line, for highlighting */
 let winningCells = [];
 let seconds = 0;
@@ -149,19 +155,40 @@ function startTimer() {
     renderTimer();
   }, 1000);
 }
-/* Pause/Resume button handler: freezes the clock and blocks moves (board.paused
-   in CSS dims it and disables pointer events); resuming also lets a pending
-   computer move proceed */
+/* Keeps the board's dimmed/locked look and the Start overlay in sync with
+   isPaused and hasStarted. The board is locked (board.paused in CSS dims it
+   and disables pointer events) whenever it's paused OR the round hasn't
+   been started yet. */
+function updateBoardLockState() {
+  ui.board.classList.toggle('paused', isPaused || !hasStarted);
+  ui.pause.disabled = !hasStarted;
+  ui.startOverlay.classList.toggle('hidden', hasStarted);
+}
+
+/* Pause/Resume button handler: freezes the clock and blocks moves; resuming
+   also lets a pending computer move proceed */
 function togglePause() {
-  if (gameOver) return;
+  if (gameOver || !hasStarted) return;
   isPaused = !isPaused;
-  ui.board.classList.toggle('paused', isPaused);
   ui.pause.textContent = isPaused ? 'Resume' : 'Pause';
+  updateBoardLockState();
   if (isPaused) stopTimer();
   else {
     startTimer();
     scheduleComputerMove();
   }
+}
+
+/* Start Game button handler: unlocks the board, starts the clock, and lets
+   the computer move if it's already its turn. Only runs once per round. */
+function beginRound() {
+  if (hasStarted || gameOver) return;
+  hasStarted = true;
+  updateBoardLockState();
+  setStatus(`${playerName()}'s turn`);
+  startTimer();
+  scheduleComputerMove();
+  saveState();
 }
 /* Toggles the light/dark theme by adding/removing body.light (see style.css)
    and swapping which sun/moon icon is visible */
@@ -331,7 +358,7 @@ function playMove(column) {
    (so the move doesn't feel instant) then plays it. Guards against firing
    again while a move is already pending via isComputerThinking. */
 function scheduleComputerMove() {
-  if (gameMode !== 'pvc' || currentPlayer !== 'Player2' || gameOver || isComputerThinking) return;
+  if (gameMode !== 'pvc' || currentPlayer !== 'Player2' || gameOver || isComputerThinking || !hasStarted) return;
   isComputerThinking = true;
   setTimeout(() => {
     if (!gameOver && !isPaused && currentPlayer === 'Player2') playMove(getComputerColumn());
@@ -340,7 +367,8 @@ function scheduleComputerMove() {
 }
 
 /* Clears the board and round-specific state (but not scores/names) —
-   shared by both "New Game" and "Reset Game" */
+   shared by both "New Game" and "Reset Game". Also re-locks the board behind
+   the Start overlay, so every new round needs its own Start press. */
 function resetRound() {
   stopTimer();
   cells = createBoard();
@@ -350,21 +378,22 @@ function resetRound() {
   isComputerThinking = false;
   winningCells = [];
   seconds = 0;
-  ui.board.classList.remove('paused');
+  hasStarted = false;
   ui.pause.textContent = 'Pause';
+  updateBoardLockState();
 }
 
-/* "New Game" button: starts a fresh round, keeping scores and player names */
+/* "New Game" button: starts a fresh round, keeping scores and player names.
+   Waits for Start Game before the clock/board unlock. */
 function restartGame() {
   resetRound();
-  setStatus(`${playerName()}'s turn`);
+  setStatus('Press Start to begin');
   renderGame();
-  startTimer();
   saveState();
 }
 
 /* "Reset Game" button: wipes scores, mode, names, and saved storage,
-   returning the whole app to its first-load state */
+   returning the whole app to its first-load state. Also waits for Start Game. */
 function resetEverything() {
   scores = { ...DEFAULT_SCORES };
   gameMode = 'pvp';
@@ -374,10 +403,9 @@ function resetEverything() {
   resetRound();
   renderNames();
   syncModeUI();
-  setStatus(`${playerName()}'s turn`);
+  setStatus('Press Start to begin');
   renderGame();
   renderLeaderboard();
-  startTimer();
   saveState();
 }
 
@@ -396,10 +424,11 @@ function launchConfetti() {
    since renderBoard() recreates all the cell elements on every move */
 ui.board.addEventListener('click', (event) => {
   const cell = event.target.closest('.cell');
-  if (!cell || gameOver || isPaused || isComputerThinking) return;
+  if (!cell || gameOver || isPaused || isComputerThinking || !hasStarted) return;
   if (playMove(Number(cell.dataset.col))) scheduleComputerMove();
 });
 
+ui.start.addEventListener('click', beginRound);
 ui.pause.addEventListener('click', togglePause);
 ui.restart.addEventListener('click', restartGame);
 ui.reset.addEventListener('click', resetEverything);
@@ -415,17 +444,16 @@ ui.inputs.Player2.addEventListener('input', () => updatePlayerName('Player2'));
 /* ---------- Boot ---------- */
 
 /* Runs once on page load: restore theme, restore (or start) a round, sync
-   all UI to that state, and kick off the timer / computer move if the
-   restored game wasn't already over */
+   all UI to that state. Every load waits behind the Start overlay before the
+   clock/board unlock — even a restored in-progress game — except a game that
+   had already finished, which just shows its final result. */
 applyTheme(localStorage.getItem(THEME_KEY) === 'light');
 if (!loadState()) resetRound();
 renderNames();
 syncModeUI();
-if (!gameOver) setStatus(`${playerName()}'s turn`);
+hasStarted = gameOver;
+if (!gameOver) setStatus('Press Start to begin');
 renderGame();
 renderLeaderboard();
-if (!gameOver) {
-  startTimer();
-  scheduleComputerMove();
-}
+updateBoardLockState();
 ui.board.classList.add('ready');

@@ -329,6 +329,39 @@ body{
   width:100%;
   flex-wrap:wrap;
 }
+/* Positioning context for #startOverlay, which sits directly on top of the board */
+#boardWrap{position:relative;}
+/* Start overlay: covers the board until Start Game is pressed (see hasStarted in
+   script.js). .hidden removes it from the layout once the round has started. */
+#startOverlay{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:24px;
+  background:rgba(7,11,28,.55);
+  backdrop-filter:blur(6px);
+}
+#startOverlay.hidden{display:none;}
+/* Primary call-to-action button inside the overlay, styled like #restartButton */
+#startButton{
+  height:56px;
+  padding:0 32px;
+  border:0;
+  border-radius:18px;
+  color:#F8FAFF;
+  font:700 18px "Poppins",sans-serif;
+  cursor:pointer;
+  background:linear-gradient(90deg,var(--accent-2-btn),var(--accent-btn));
+  box-shadow:0 0 30px rgba(41,183,255,.3);
+  transition:.3s ease;
+}
+#startButton:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 40px rgba(41,183,255,.45);
+}
 /* 7x6 Connect Four grid (7 columns, 6 rows), one .cell per slot */
 #gameBoard{
   display:grid;
@@ -423,6 +456,12 @@ body{
 #pauseButton:hover,#resetGameButton:hover{
   background:rgba(40,48,82,.64);
   transform:translateY(-2px);
+}
+/* Pause is disabled until Start Game is pressed (nothing to pause yet) */
+#pauseButton:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
 }
 /* Primary call-to-action button: accent gradient + glow to stand out from the secondary buttons */
 #restartButton{
@@ -543,5 +582,6 @@ body.light footer{color:black;}
   #statusText{font-size:16px;}
   #controls{align-items:stretch;}
   #pauseButton,#restartButton,#resetGameButton{height:48px;font-size:14px;padding:0 16px;}
+  #startButton{height:48px;font-size:14px;padding:0 20px;}
   footer{font-size:12px;}
 }

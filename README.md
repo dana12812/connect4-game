@@ -50,6 +50,7 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 - As a player, I want to enter my name and pick Player vs Player or Vs Computer so that I can play my way.
 - As a player, I want to click a column to drop my disc so that I can take my turn.
 - As a player, I want to be told whose turn it is and when there's a win or draw so that the game state is always clear.
+- As a player, I want to press Start when I'm ready so that the clock doesn't run before I've begun playing.
 - As a player, I want a timer, pause, and win celebration so that each round feels complete.
 - As a player, I want New Game and Reset Game options so that I can replay or start fresh.
 - As a player, I want my scores, leaderboard, and theme to persist after a refresh so that I don't lose progress.
@@ -71,7 +72,6 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 
 - **Play online:** [https://dana12812.github.io/connect4-game/](https://dana12812.github.io/connect4-game/)
 - **Planning materials:** [Figma — Connect Four Game UI](https://www.figma.com/community/file/1666701752891294298)
-- **Presentation:** [Connect_Four_Presentation.pdf](presentation/Connect_Four_Presentation.pdf)
 - **Run locally:** see [Installation](#installation) below
 
 ---
@@ -80,13 +80,17 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 
 <div align="center">
 
-| Gameplay | Winning Screen |
+| Start Screen | Gameplay |
 |:---:|:---:|
-| ![Gameplay](screenshots/gameplay.png) | ![Winner](screenshots/winner.png) |
+| <img src="screenshots/start-screen.png" width="420"> | <img src="screenshots/gameplay.png" width="420"> |
 
-| Light Theme | Mobile Layout |
+| Winning Screen | Light Theme |
 |:---:|:---:|
-| ![Light Theme](screenshots/light-theme.png) | ![Mobile](screenshots/mobile.png) |
+| <img src="screenshots/winner.png" width="420"> | <img src="screenshots/light-theme.png" width="420"> |
+
+| Mobile Layout |
+|:---:|
+| <img src="screenshots/mobile.png" width="320"> |
 
 </div>
 
@@ -96,18 +100,20 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 
 1. Enter names for Player 1 and Player 2 (or switch to **Vs Computer** mode).
 2. Choose **2 Players** or **Vs Computer**.
-3. Click any column on the board to drop your disc into the lowest open slot.
-4. Players alternate turns.
-5. Connect four discs in a row — horizontally, vertically, or diagonally — to win.
-6. **Pause** stops the clock (and the computer) without losing your progress.
-7. **New Game** clears the board for another round but keeps scores and player names.
-8. **Reset Game** wipes everything — board, scores, names, theme, and the leaderboard — back to a fresh start.
+3. Press **Start Game** on the board overlay to begin the match and start the clock — nothing moves until you do.
+4. Click any column on the board to drop your disc into the lowest open slot.
+5. Players alternate turns.
+6. Connect four discs in a row — horizontally, vertically, or diagonally — to win.
+7. **Pause** stops the clock (and the computer) without losing your progress.
+8. **New Game** clears the board for another round but keeps scores and player names — you'll need to press **Start Game** again.
+9. **Reset Game** wipes everything — board, scores, names, theme, and the leaderboard — back to a fresh start.
 
 ---
 
 ## Features
 
 - Player vs Player and Player vs Computer modes
+- Start Game button that locks the board and holds off the timer until you're ready to play
 - Simple computer opponent that blocks losing moves and takes winning ones when available
 - Editable player names, saved between sessions
 - Live scoreboard (wins for each player plus ties)
@@ -138,8 +144,6 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 connect4-game
 │
 ├── screenshots
-├── presentation
-│   └── Connect_Four_Presentation.pdf
 ├── README.md
 ├── index.html
 │

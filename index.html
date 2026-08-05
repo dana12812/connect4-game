@@ -42,6 +42,7 @@
     <section id="instructions">
       <h2>How to Play</h2>
       <ol>
+        <li><strong>Start Game</strong> begins the match and starts the clock.</li>
         <li>Click a column to drop your piece.</li>
         <li>Connect 4 in a row — across, up-down, or diagonally — to win.</li>
         <li><strong>Pause</strong> stops the clock.</li>
@@ -88,7 +89,12 @@
     </div>
 
     <div id="gameArea">
-      <div id="boardWrap"><div id="gameBoard"></div></div>
+      <div id="boardWrap">
+        <div id="gameBoard"></div>
+        <div id="startOverlay">
+          <button id="startButton">Start Game</button>
+        </div>
+      </div>
       <aside id="leaderboardPanel">
         <h2>Leaderboard</h2>
         <ol id="leaderboardList"></ol>

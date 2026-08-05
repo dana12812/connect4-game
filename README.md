@@ -1,11 +1,41 @@
+<div align="center">
+
 # Connect Four
+
+### A browser-based Connect Four game — built with vanilla HTML, CSS & JavaScript
+
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](index.html)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](css/style.css)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](js/script.js)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-35C8FF?style=for-the-badge&logo=googlechrome&logoColor=white)](https://dana12812.github.io/connect4-game/)
+[![License](https://img.shields.io/badge/License-Educational-B13FFF?style=for-the-badge)](#license)
 
 ![Gameplay Screenshot](screenshots/gameplay.png)
 
+</div>
 
 A browser-based implementation of the classic **Connect Four** game, built from scratch with vanilla **HTML, CSS, and JavaScript** — no frameworks, no libraries beyond a small confetti effect. Two players (or one player against a simple computer opponent) take turns dropping discs into a 6x7 grid, racing to connect four in a row horizontally, vertically, or diagonally.
 
 This project was built as part of the **General Assembly Software Engineering Bootcamp**, as my first solo JavaScript project focused on DOM manipulation, game logic, and state management without a framework.
+
+---
+
+## Table of Contents
+
+- [Background](#background)
+- [User Stories](#user-stories)
+- [Live Demo](#live-demo)
+- [Getting Started](#getting-started)
+- [Screenshots](#screenshots)
+- [How to Play](#how-to-play)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [File Structure](#file-structure)
+- [Installation](#installation)
+- [Next Steps](#next-steps)
+- [Attributions](#attributions)
+- [Author](#author)
+- [License](#license)
 
 ---
 
@@ -29,32 +59,36 @@ I chose Connect Four because it's one of the games I genuinely enjoy playing, an
 
 ## Live Demo
 
-**[Play Connect Four](https://dana12812.github.io/connect4-game/)** 
+<div align="center">
+
+**[▶ Play Connect Four](https://dana12812.github.io/connect4-game/)**
+
+</div>
 
 ---
 
 ## Getting Started
 
-- **Play online:** [https://dana12812.github.io/connect4-game/](https://dana12812.github.io/connect4-game/) 
-
+- **Play online:** [https://dana12812.github.io/connect4-game/](https://dana12812.github.io/connect4-game/)
 - **Planning materials:** [Figma — Connect Four Game UI](https://www.figma.com/community/file/1666701752891294298)
-
 - **Presentation:** [Connect_Four_Presentation.pdf](presentation/Connect_Four_Presentation.pdf)
-
+- **Run locally:** see [Installation](#installation) below
 
 ---
 
 ## Screenshots
 
+<div align="center">
+
 | Gameplay | Winning Screen |
-|---|---|
+|:---:|:---:|
 | ![Gameplay](screenshots/gameplay.png) | ![Winner](screenshots/winner.png) |
 
 | Light Theme | Mobile Layout |
-|---|---|
+|:---:|:---:|
 | ![Light Theme](screenshots/light-theme.png) | ![Mobile](screenshots/mobile.png) |
 
-
+</div>
 
 ---
 
@@ -173,8 +207,13 @@ https://developer.mozilla.org/
 
 ## Author
 
+<div align="center">
+
 **Dana Alsaleh**
-GitHub: [https://github.com/dana12812](https://github.com/dana12812)
+
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dana12812)
+
+</div>
 
 ---
 

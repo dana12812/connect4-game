@@ -4,8 +4,7 @@
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-/* Cache every DOM element the game touches, keyed by purpose, so the rest
-   of the file never has to call document.querySelector again */
+/* Cache every DOM element the game touches, keyed by purpose */
 const ui = {
   board: $('#gameBoard'),
   status: $('#statusMessage'),
@@ -52,9 +51,7 @@ let gameOver = false;
 let isPaused = false;
 /* prevents double-moves while the computer's delayed move is pending */
 let isComputerThinking = false;
-/* false until the Start Game button is pressed: keeps the board locked and the
-   clock stopped so nothing happens until the player is ready. Reset for every
-   new round (boot, New Game, Reset Game) so Start must be pressed each time. */
+/* False until Start Game is pressed; locks the board/clock until then, reset each new round */
 let hasStarted = false;
 /* the 4 (or more) [row, col] cells that formed the winning line, for highlighting */
 let winningCells = [];
@@ -87,8 +84,7 @@ function getSavedData(key, fallback) {
   }
 }
 
-/* Rebuilds all 42 .cell divs from the `cells` array and swaps them into the DOM
-   in one go (via a DocumentFragment) to avoid layout thrashing */
+/* Rebuilds all 42 .cell divs from `cells` and swaps them in via a DocumentFragment */
 function renderBoard() {
   const fragment = document.createDocumentFragment();
   cells.forEach((row, rowIndex) => row.forEach((player, columnIndex) => {
@@ -155,18 +151,14 @@ function startTimer() {
     renderTimer();
   }, 1000);
 }
-/* Keeps the board's dimmed/locked look and the Start overlay in sync with
-   isPaused and hasStarted. The board is locked (board.paused in CSS dims it
-   and disables pointer events) whenever it's paused OR the round hasn't
-   been started yet. */
+/* Syncs the board's locked look and the Start overlay with isPaused/hasStarted */
 function updateBoardLockState() {
   ui.board.classList.toggle('paused', isPaused || !hasStarted);
   ui.pause.disabled = !hasStarted;
   ui.startOverlay.classList.toggle('hidden', hasStarted);
 }
 
-/* Pause/Resume button handler: freezes the clock and blocks moves; resuming
-   also lets a pending computer move proceed */
+/* Pause/Resume handler: freezes the clock and blocks moves; resuming lets a pending computer move proceed */
 function togglePause() {
   if (gameOver || !hasStarted) return;
   isPaused = !isPaused;
@@ -179,8 +171,7 @@ function togglePause() {
   }
 }
 
-/* Start Game button handler: unlocks the board, starts the clock, and lets
-   the computer move if it's already its turn. Only runs once per round. */
+/* Start Game handler: unlocks the board, starts the clock, lets the computer move if it's its turn */
 function beginRound() {
   if (hasStarted || gameOver) return;
   hasStarted = true;
@@ -190,24 +181,21 @@ function beginRound() {
   scheduleComputerMove();
   saveState();
 }
-/* Toggles the light/dark theme by adding/removing body.light (see style.css)
-   and swapping which sun/moon icon is visible */
+/* Toggles light/dark theme via body.light and swaps the sun/moon icon */
 function applyTheme(isLight) {
   document.body.classList.toggle('light', isLight);
   if (ui.moon) ui.moon.style.display = isLight ? 'none' : 'block';
   if (ui.sun) ui.sun.style.display = isLight ? 'block' : 'none';
 }
 
-/* Persists the current round (board, scores, names, status text) to localStorage
-   so a page refresh resumes where the player left off */
+/* Persists the current round to localStorage so a refresh resumes where you left off */
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify({
     cells, currentPlayer, gameOver, scores, seconds, gameMode, playerNames,
     statusText: ui.statusText.textContent, statusTone: ui.status.className
   }));
 }
-/* Restores a previously saved round from localStorage. Returns false if there
-   was nothing to restore, so callers know to start a fresh round instead */
+/* Restores a saved round from localStorage; returns false if there's nothing to restore */
 function loadState() {
   const saved = getSavedData(STORAGE_KEY, null);
   if (!saved) return false;
@@ -233,16 +221,13 @@ function saveWin(name) {
   localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(leaderboard));
 }
 
-/* Reflects `gameMode` in the UI: highlights the active mode button and
-   disables the Player 2 name input when playing against the computer */
+/* Reflects gameMode in the UI: highlights the active mode button, disables P2 input in pvc */
 function syncModeUI() {
   ui.modes.forEach((button) => button.classList.toggle('active', button.dataset.mode === gameMode));
   ui.inputs.Player2.disabled = gameMode === 'pvc';
 }
 
-/* Switches between 2-player and vs-computer mode; renames Player 2 to
-   "Computer" (or restores the default name) and lets the computer move
-   immediately if it's already its turn */
+/* Switches modes, renames Player 2 to "Computer" in pvc, and lets the computer move if it's its turn */
 function setMode(mode) {
   gameMode = mode;
   playerNames.Player2 = mode === 'pvc' ? 'Computer' : DEFAULT_NAMES.Player2;
@@ -251,8 +236,7 @@ function setMode(mode) {
   saveState();
   scheduleComputerMove();
 }
-/* Handles typing in a name input: ignores Player 2 while it's locked to
-   "Computer" in vs-computer mode, falls back to the default name if blank */
+/* Handles name input typing; ignores Player 2 while locked to "Computer", falls back if blank */
 function updatePlayerName(player) {
   if (player === 'Player2' && gameMode === 'pvc') return;
   playerNames[player] = ui.inputs[player].value.trim() || DEFAULT_NAMES[player];
@@ -266,9 +250,7 @@ function getAvailableRow(column) {
   return cells.map((row) => row[column]).lastIndexOf('');
 }
 
-/* Walks outward from (row, column) one step at a time in direction
-   (rowStep, columnStep), collecting consecutive cells owned by `player`.
-   Used by findWinningCells to look both ways along a line (e.g. left+right). */
+/* Walks outward from (row, column) collecting consecutive cells owned by player */
 function getLine(row, column, rowStep, columnStep, player) {
   const line = [];
   for (
@@ -279,9 +261,7 @@ function getLine(row, column, rowStep, columnStep, player) {
   return line;
 }
 
-/* Checks all 4 line directions (horizontal, vertical, both diagonals) through
-   the just-played cell; returns the connected cells (including the played one)
-   if any direction has 4+ in a row, otherwise an empty array */
+/* Checks all 4 directions through the played cell; returns the connected cells if 4+ in a row */
 function findWinningCells(row, column, player) {
   for (const [rowStep, columnStep] of DIRECTIONS) {
     const line = [[row, column],
@@ -296,10 +276,7 @@ function boardIsFull() {
   return cells.every((row) => row.every(Boolean));
 }
 
-/* Simple AI for the "vs Computer" mode: take a winning move if one exists,
-   otherwise block the opponent's winning move, otherwise play a random
-   valid column. Tactical checks work by temporarily placing a piece,
-   testing for a win, then undoing it. */
+/* Simple AI: win if possible, else block the opponent, else play randomly (tests moves by placing then undoing) */
 function getComputerColumn() {
   const valid = Array.from({ length: COLUMNS }, (_, column) => column)
     .filter((column) => getAvailableRow(column) !== -1);
@@ -316,8 +293,7 @@ function getComputerColumn() {
     ?? valid[Math.floor(Math.random() * valid.length)];
 }
 
-/* Ends the current round: stops the clock, updates scores (win or tie),
-   records the win to the leaderboard + fires confetti, then re-renders and saves */
+/* Ends the round: updates scores, records a win to the leaderboard + confetti, then re-renders and saves */
 function endGame(message, tone, winner) {
   gameOver = true;
   stopTimer();
@@ -332,10 +308,7 @@ function endGame(message, tone, winner) {
   saveState();
 }
 
-/* Drops the current player's piece into `column`. Returns false if the
-   column is full (no move made). Otherwise places the piece, checks for a
-   win or a full-board draw, and either ends the game or hands off to the
-   next player. */
+/* Drops the current player's piece into column; returns false if the column is full */
 function playMove(column) {
   const row = getAvailableRow(column);
   if (row === -1) return false;
@@ -354,9 +327,7 @@ function playMove(column) {
   return true;
 }
 
-/* If it's the computer's turn in vs-computer mode, waits COMPUTER_DELAY ms
-   (so the move doesn't feel instant) then plays it. Guards against firing
-   again while a move is already pending via isComputerThinking. */
+/* Waits COMPUTER_DELAY ms then plays the computer's move, guarded by isComputerThinking */
 function scheduleComputerMove() {
   if (gameMode !== 'pvc' || currentPlayer !== 'Player2' || gameOver || isComputerThinking || !hasStarted) return;
   isComputerThinking = true;
@@ -366,9 +337,7 @@ function scheduleComputerMove() {
   }, COMPUTER_DELAY);
 }
 
-/* Clears the board and round-specific state (but not scores/names) —
-   shared by both "New Game" and "Reset Game". Also re-locks the board behind
-   the Start overlay, so every new round needs its own Start press. */
+/* Clears round state (not scores/names) and re-locks the board behind Start; shared by New Game & Reset Game */
 function resetRound() {
   stopTimer();
   cells = createBoard();
@@ -383,8 +352,7 @@ function resetRound() {
   updateBoardLockState();
 }
 
-/* "New Game" button: starts a fresh round, keeping scores and player names.
-   Waits for Start Game before the clock/board unlock. */
+/* New Game: starts a fresh round, keeping scores and names, waiting for Start Game */
 function restartGame() {
   resetRound();
   setStatus('Press Start to begin');
@@ -392,8 +360,7 @@ function restartGame() {
   saveState();
 }
 
-/* "Reset Game" button: wipes scores, mode, names, and saved storage,
-   returning the whole app to its first-load state. Also waits for Start Game. */
+/* Reset Game: wipes scores, mode, names, and storage back to first-load state */
 function resetEverything() {
   scores = { ...DEFAULT_SCORES };
   gameMode = 'pvp';
@@ -420,8 +387,7 @@ function launchConfetti() {
 
 /* ---------- Event Listeners ---------- */
 
-/* Single listener on the board (event delegation) instead of one per cell,
-   since renderBoard() recreates all the cell elements on every move */
+/* Event delegation on the board instead of one listener per cell, since renderBoard() recreates cells */
 ui.board.addEventListener('click', (event) => {
   const cell = event.target.closest('.cell');
   if (!cell || gameOver || isPaused || isComputerThinking || !hasStarted) return;
@@ -443,10 +409,7 @@ ui.inputs.Player2.addEventListener('input', () => updatePlayerName('Player2'));
 
 /* ---------- Boot ---------- */
 
-/* Runs once on page load: restore theme, restore (or start) a round, sync
-   all UI to that state. Every load waits behind the Start overlay before the
-   clock/board unlock — even a restored in-progress game — except a game that
-   had already finished, which just shows its final result. */
+/* Boot: restore theme/round, sync UI, and wait behind Start overlay unless the restored game already ended */
 applyTheme(localStorage.getItem(THEME_KEY) === 'light');
 if (!loadState()) resetRound();
 renderNames();

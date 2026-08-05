@@ -411,8 +411,9 @@ body{
 }
 footer{
   text-align:center;
-  font-size:14px;
-  color:rgba(248,250,255,.6);
+  font-size:18px;
+  font-weight: 900;
+  color:white;
 }
 
 /* Theme button */
@@ -466,8 +467,6 @@ body.light .cell.Player2{
 
 body.light .modeBtn:not(.active){color:#181c2b;}
 
-body.light .modeBtn:hover{background:rgba(255,255,255,.6);}
-
 body.light #p1NameInput,
 body.light #p2NameInput{
   background:rgba(255,255,255,.75);
@@ -476,7 +475,7 @@ body.light #p2NameInput{
 body.light #p1NameInput::placeholder,
 body.light #p2NameInput::placeholder{color:rgba(24,28,43,.45);}
 
-body.light footer{color:rgba(24,28,43,.65);}
+body.light footer{color:black;}
 
 /* Responsive */
 

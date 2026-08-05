@@ -14,7 +14,7 @@
 
 </div>
 
-A browser-based implementation of the classic **Connect Four** game, built from scratch with vanilla **HTML, CSS, and JavaScript** — no frameworks, no libraries beyond a small confetti effect. Two players (or one player against a simple computer opponent) take turns dropping discs into a 6x7 grid, racing to connect four in a row horizontally, vertically, or diagonally.
+A browser-based implementation of the classic **Connect Four** game, built from scratch with  **HTML, CSS, and JavaScript** — no frameworks, no libraries beyond a small confetti effect. Two players (or one player against a simple computer opponent) take turns dropping discs into a 6x7 grid, racing to connect four in a row horizontally, vertically, or diagonally.
 
 This project was built as part of the **General Assembly Software Engineering Bootcamp**, as my first solo JavaScript project focused on DOM manipulation, game logic, and state management without a framework.
 

@@ -451,7 +451,14 @@ body.light{
 
 body.light #gameBoard{background:#3a4290;}
 
-body.light .cell{background:#dfe3f5;}
+body.light .cell.Player1{
+  background:linear-gradient(145deg,var(--pink),#FF8BC7);
+  box-shadow:0 0 18px var(--pink-glow),inset 0 4px 8px rgba(255,255,255,.25);
+}
+body.light .cell.Player2{
+  background:linear-gradient(145deg,var(--blue),#9AF8FF);
+  box-shadow:0 0 18px var(--blue-glow),inset 0 4px 8px rgba(255,255,255,.25);
+}
 
 body.light .modeBtn:not(.active){color:#181c2b;}
 

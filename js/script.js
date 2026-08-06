@@ -276,7 +276,7 @@ function boardIsFull() {
   return cells.every((row) => row.every(Boolean));
 }
 
-/* Simple AI: win if possible, else block the opponent, else play randomly (tests moves by placing then undoing) */
+/* Simple AI: win if possible, else block the opponent, else play randomly (tests moves by placing then undoing) */ 
 function getComputerColumn() {
   const valid = Array.from({ length: COLUMNS }, (_, column) => column)
     .filter((column) => getAvailableRow(column) !== -1);
